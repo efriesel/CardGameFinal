@@ -104,7 +104,7 @@ public class Round {
         int i = 0;
         while (calls != numBetters){
             if (!players.get(i).isElim()){
-                System.out.println("Enter bet, with a minimum being " + bet + ", enter c to call, a number higher than " + minBet + " to place a higher bet, a for all in, f to fold, or  h to see current best hand");
+                System.out.println("Enter bet, with a minimum being " + bet + ", enter c to call, a number higher than " + minBet + " to place a higher bet, a for all in, f to fold, or h to see current best hand");
                 int in = s.nextInt();
                 while (in == (int) 'h') {
                     s.nextLine();
@@ -190,8 +190,23 @@ public class Round {
         }
         SidePot finalPot = new SidePot(pot, sidePlayers);
         for (int i = 0; i < numPots; i++){
-
+            findWinner(pots.get(i).getPlayers());
         }
+    }
+    public ArrayList<Player> findWinner(ArrayList<Player> p){
+        int bestScore = 0;
+        ArrayList<Player> winners = new ArrayList<Player>();
+        for (int i = 0; i < p.size(); i++){
+            if (p.get(i).getBestPoints() == bestScore){
+                winners.add(p.get(i));
+            }
+            else if (p.get(i).getBestPoints() > bestScore){
+                winners = new ArrayList<Player>();
+                winners.add(p.get(i));
+                bestScore = p.get(i).getBestPoints();
+            }
+        }
+        return winners;
     }
 
 

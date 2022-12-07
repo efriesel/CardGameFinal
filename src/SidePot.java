@@ -13,5 +13,10 @@ public class SidePot {
                 players.add(p.get(i));
         }
         pot = money;
+        numPlayers = p.size();
+    }
+
+    public ArrayList<Player> getPlayers(){
+        return players;
     }
 }

@@ -11,6 +11,12 @@ public class Player {
 
     private Deck currentHand;
 
+    public int getBestPoints() {
+        return bestPoints;
+    }
+
+    private int bestPoints = 0;
+
     public int getMoney() {
         return money;
     }
@@ -38,7 +44,6 @@ public class Player {
 
     public Deck getBestHand(Deck hand, Deck river){
         Deck bestHand = new Deck();
-        int bestPoints = 0;
         int points;
         for (int i = 0; i < river.getSize() - 2; i++){
             currentHand = new Deck();
