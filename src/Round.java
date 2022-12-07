@@ -80,7 +80,7 @@ public class Round {
         }
 
     }
-    public void bet(){
+    public void be(){
         Scanner s = new Scanner(System.in);
         for (int i = 0; i < playerCount; i++){
             if (!players.get(i).isElim()){
