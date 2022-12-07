@@ -13,9 +13,22 @@ public class Round {
 
     private ArrayList<Player> players;
 
+    private ArrayList<SidePot> pots = new ArrayList<SidePot>();
+
+    boolean allIn;
+
+    int allInBettor;
+
+    int numPots = 0;
+
+    int numBetters;
     private int minBet;
 
     private int turn = 0;
+
+    private int pot;
+
+    private int calls = 0;
 
     public Round(int playerCount, Deck deck, Player[] players, int minBet){
         this.players = new ArrayList<Player>();
@@ -26,6 +39,7 @@ public class Round {
             this.players.add(p);
         }
         playRound();
+        numBetters = playerCount;
 
     }
 
@@ -35,12 +49,17 @@ public class Round {
         System.out.println("Now each player will check their hands");
 
         revealHands();
+        bet(minBet);
         river(3);
         for (int i = 0; i < playerCount; i++){
             if (!players.get(i).isElim())
                 Player.printHand(players.get(i).getBestHand(players.get(i).getHand(), river));
         }
-
+        bet(0);
+        river(1);
+        bet(0);
+        river(1);
+        bet(0);
     }
     public void printInstructions(){
         Scanner s = new Scanner(System.in);
@@ -80,22 +99,98 @@ public class Round {
         }
 
     }
-    public void be(){
+    public void bet(int bet){
         Scanner s = new Scanner(System.in);
-        for (int i = 0; i < playerCount; i++){
+        int i = 0;
+        while (calls != numBetters){
             if (!players.get(i).isElim()){
-                System.out.println("Enter bet, with a minimum being " + minBet + " or press h to see current best hand");
-               int in = s.nextInt();
-                if (in == ( int) 'h')) {
+                System.out.println("Enter bet, with a minimum being " + bet + ", enter c to call, a number higher than " + minBet + " to place a higher bet, a for all in, f to fold, or  h to see current best hand");
+                int in = s.nextInt();
+                while (in == (int) 'h') {
                     s.nextLine();
                     Player.printHand(players.get(i).getBestHand(players.get(i).getHand(), river));
-                    System.out.println("Now enter your bet, with a minimum of " + minBet);
-                    in = s.nextInt()
+                    System.out.println("Now enter your call or bet , with " + bet + " being c to call, a to go all in, f to fold, or higher to bet");
+                    in = s.nextInt();
                 }
-                while ( in <= minBet) {
-
+                if (in == (int) 'f'){
+                    playerCount--;
+                    numBetters--;
+                    players.get(i).setElim(true);
+                }
+                if (in == (int) 'c'){
+                    pot += bet;
+                    players.get(i).setMoney(players.get(i).getMoney() - bet);
+                    calls++;
+                }
+                if (in == (int) 'a'){
+                    if (players.get(i).getMoney() < bet) {
+                        ArrayList<Player> sidePlayers = new ArrayList<Player>();
+                        for (int j = 0; j < playerCount; j++) {
+                            if (!players.get(j).isElim())
+                                sidePlayers.add(players.get(j));
+                        }
+                        numPots++;
+                        SidePot p = new SidePot((numBetters * bet), sidePlayers);
+                        pots.add(p);
+                        numBetters--;
+                        players.get(i).setElim(true);
+                        players.get(i).setMoney(0);
+                    }
+                    if (players.get(i).getMoney() > bet) {
+                        bet = players.get(i).getMoney();
+                        pot += bet;
+                        allIn = true;
+                        allInBettor = i;
+                    }
+                }
+                else {
+                    while (in <= bet) {
+                        s.nextLine();
+                        System.out.println("Now enter your bet, with a minimum of " + bet);
+                        in = s.nextInt();
+                    }
+                    if (allIn) {
+                        ArrayList<Player> sidePlayers = new ArrayList<Player>();
+                        for (int j = 0; j < playerCount; j++) {
+                            if (!players.get(j).isElim())
+                                sidePlayers.add(players.get(j));
+                        }
+                        SidePot p = new SidePot(bet, sidePlayers);
+                        pots.add(p);
+                        numPots++;
+                        numBetters--;
+                        players.get(allInBettor).setElim(true);
+                        players.get(allInBettor).setMoney(0);
+                        allIn = false;
+                    }
+                    bet = in;
                 }
             }
+            if (allIn){
+                ArrayList<Player> sidePlayers = new ArrayList<Player>();
+                for (int j = 0; j < playerCount; j++) {
+                    if (!players.get(j).isElim())
+                        sidePlayers.add(players.get(j));
+                }
+                SidePot p = new SidePot(bet, sidePlayers);
+                pots.add(p);
+                numPots++;
+                players.get(allInBettor).setElim(true);
+                players.get(allInBettor).setMoney(0);
+                allIn = false;
+            }
+            i++;
+        }
+    }
+    public void revealWinner(){
+        ArrayList<Player> sidePlayers = new ArrayList<Player>();
+        for (int j = 0; j < playerCount; j++) {
+            if (!players.get(j).isElim())
+                sidePlayers.add(players.get(j));
+        }
+        SidePot finalPot = new SidePot(pot, sidePlayers);
+        for (int i = 0; i < numPots; i++){
+
         }
     }
 

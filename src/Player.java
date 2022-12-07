@@ -11,6 +11,14 @@ public class Player {
 
     private Deck currentHand;
 
+    public int getMoney() {
+        return money;
+    }
+
+    public void setMoney(int money) {
+        this.money = money;
+    }
+
     private int money;
     private int points;
 
