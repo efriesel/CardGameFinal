@@ -28,8 +28,7 @@ public class SidePot {
     public SidePot(int money, ArrayList<Player> p){
         players = new ArrayList<Player>();
         for (int i = 0; i < p.size(); i++){
-            if (!p.get(i).isElim())
-                players.add(p.get(i));
+            players.add(p.get(i));
         }
         pot = money;
         numPlayers = p.size();

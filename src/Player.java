@@ -15,7 +15,17 @@ public class Player {
         return bestPoints;
     }
 
-    private int bestPoints = 0;
+    private int bestPoints;
+
+    public int getLastBet() {
+        return lastBet;
+    }
+
+    public void setLastBet(int lastBet) {
+        this.lastBet = lastBet;
+    }
+
+    private int lastBet;
 
     public int getMoney() {
         return money;
@@ -51,11 +61,13 @@ public class Player {
         points = 0;
         elim = false;
         hand = new Deck();
+        bestPoints = 0;
     }
 
     public Deck getBestHand(Deck river){
         Deck bestHand = new Deck();
         int points;
+        bestPoints = 0;
         for (int i = 0; i < river.getSize() - 2; i++){
             for (int j = i + 1; j < river.getSize() - 1; j++){
                 for (int k = j + 1; k < river.getSize(); k++){
@@ -86,6 +98,16 @@ public class Player {
 //    }
     public void setDeck(ArrayList<Card> deck){
         hand = new Deck(deck);
+    }
+
+    public void setDeck(Deck d){
+        hand = d;
+        bestHand = new Deck();
+        currentHand = new Deck();
+        points = 0;
+        bestPoints = 0;
+        setElim(false);
+        lastPot = 0;
     }
     public String getName(){
         return name;
@@ -118,17 +140,17 @@ public class Player {
             System.out.print(c);
             System.out.print(", ");
         }
-        System.out.println("]");
+        System.out.println("] $" + money);
         System.out.println("Press enter to continue");
     }
-    public static void printHand(Deck d){
+    public static void printHand(Deck d, int money){
         Scanner s = new Scanner(System.in);
         System.out.print("[ ");
         for (Card c : d.getCards()){
             System.out.print(c);
             System.out.print(", ");
         }
-        System.out.println("]");
+        System.out.println("] $" + money);
         System.out.println("Press enter to continue");
         s.nextLine();
     }

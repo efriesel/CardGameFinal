@@ -54,6 +54,7 @@ public class Deck {
             cards.add(c.get(i));
     }
 
+
     public Deck(){
         cards = new ArrayList<Card>();
     }
@@ -81,7 +82,7 @@ public class Deck {
             points = 61928 + RANK_ORDER.indexOf(cards.get(0).getRank());
             return;
         }
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 5; i++) {
             pointTotal += cards.get(i).getPoint();
         }
         int[] pairs = hasPairs();
@@ -219,10 +220,16 @@ public class Deck {
                          return pairs;
                      }
                  }
+                 else {
+                     pairs[0] = RANK_ORDER.indexOf(cards.get(i).getRank());
+                     current++;
+                 }
 
-                 current++;
                  i++;
             }
+        }
+        if (current == 1){
+            return pairs;
         }
         return null;
     }

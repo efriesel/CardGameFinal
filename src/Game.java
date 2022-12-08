@@ -32,7 +32,7 @@ public class Game {
 
         setPlayers();
         bet = INITIAL_BET;
-        while (playerCount > 0) {
+        while (playerCount > 1) {
             Round r = new Round(playerCount, deck, players, bet);
             setPlayersInGame();
             bet += BET_INCREASE_AMOUNT;
@@ -66,6 +66,7 @@ public class Game {
                 i--;
                 playerCount--;
             }
+            players.get(i).setDeck(new Deck());
         }
     }
 }
