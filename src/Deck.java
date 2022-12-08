@@ -149,14 +149,15 @@ public class Deck {
         if (cards.isEmpty())
             return null;
         cardsLeft--;
-        return cards.get(cardsLeft + 1);
+        return cards.get(cardsLeft);
+
     }
 
     public void shuffle(){
         cardsLeft = cards.size();
-        for (int i = cardsLeft - 1; i >= 0; i--){
+        for (int i = cardsLeft - 1; i > 0; i--){
              int r = (int)(Math.random() * (i + 1));
-             Card c = cards.get(i);
+             Card c = cards.get(i - 1);
              c = cards.set(r, c);
              cards.set(i, c);
         }
@@ -164,9 +165,9 @@ public class Deck {
 
     public void sort() {
         for (int i = 0; i < cards.size(); i++){
-            int min = Integer.MIN_VALUE;
+            int min = Integer.MAX_VALUE;
             int minPlace = 0;
-            for (int j = 0; j < cards.size() - i; j++) {
+            for (int j = i; j < cards.size(); j++) {
                 if (cards.get(j).getPoint() <= min) {
                     min = cards.get(j).getPoint();
                     minPlace = j;

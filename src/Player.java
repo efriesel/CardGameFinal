@@ -28,6 +28,16 @@ public class Player {
     private int money;
     private int points;
 
+    public int getLastPot() {
+        return lastPot;
+    }
+
+    public void setLastPot(int lastPot) {
+        this.lastPot = lastPot;
+    }
+
+    private int lastPot;
+
     private String name;
 
 
@@ -40,17 +50,18 @@ public class Player {
         this.money = money;
         points = 0;
         elim = false;
+        hand = new Deck();
     }
 
-    public Deck getBestHand(Deck hand, Deck river){
+    public Deck getBestHand(Deck river){
         Deck bestHand = new Deck();
         int points;
         for (int i = 0; i < river.getSize() - 2; i++){
-            currentHand = new Deck();
-            currentHand.add(hand.getCards().get(0));
-            currentHand.add(hand.getCards().get(1));
             for (int j = i + 1; j < river.getSize() - 1; j++){
                 for (int k = j + 1; k < river.getSize(); k++){
+                    currentHand = new Deck();
+                    currentHand.add(hand.getCards().get(0));
+                    currentHand.add(hand.getCards().get(1));
                     currentHand.add(river.getCards().get(i));
                     currentHand.add(river.getCards().get(j));
                     currentHand.add(river.getCards().get(k));
@@ -59,7 +70,7 @@ public class Player {
                         bestPoints = points;
                         bestHand = new Deck();
                         for (int l = 0; l < 5; l++){
-                            bestHand.add(currentHand.getCards().get(i));
+                            bestHand.add(currentHand.getCards().get(l));
                         }
                     }
                 }

@@ -3,29 +3,41 @@ import java.util.ArrayList;
 public class Game {
     private static final int MAX_PLAYERS = 4;
     private static final int INITIAL_MONEY = 1000;
+
+    private static final int INITIAL_BET = 50;
+
+    private static final int BET_INCREASE_AMOUNT = 50;
     private String[] ranks;
     private String[] suits;
     private int[] values;
 
+    int bet;
     private int playerCount;
+
 
     private Deck deck;
 
-    private Player[] players;
+    private ArrayList<Player> players;
 
 
     public static void main(String[] args) {
-
+        new Game();
     }
 
     public Game(){
-        ranks = new String[]{"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King", "Ace"};
+        ranks = new String[]{"2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King", "Ace"};
         suits = new String[]{"Spades", "Clubs", "Hearts", "Diamonds"};
         values = new int[]{1,2,3,4,5,6,11,20,37,70,135,264,517};
         deck = new Deck(ranks, suits, values);
 
         setPlayers();
-        Round r = new Round(playerCount, deck, players, 50);
+        bet = INITIAL_BET;
+        while (playerCount > 0) {
+            Round r = new Round(playerCount, deck, players, bet);
+            setPlayersInGame();
+            bet += BET_INCREASE_AMOUNT;
+        }
+        System.out.println(players.get(0).getName() + " has won");
     }
 
     public void setPlayers() {
@@ -39,11 +51,21 @@ public class Game {
         }
         s.nextLine();
         playerCount = in;
-        players = new Player[playerCount];
+        players = new ArrayList<Player>();
         for (int i = 0; i < playerCount; i++){
+            System.out.println("Enter name of player " + (i + 1)) ;
             String name = s.nextLine();
-            players[i] = new Player(name, INITIAL_MONEY);
+            players.add(new Player(name, INITIAL_MONEY));
         }
 
+    }
+    public void setPlayersInGame(){
+        for (int i = 0; i < playerCount; i++){
+            if (players.get(i).getMoney() == 0){
+                players.remove(i);
+                i--;
+                playerCount--;
+            }
+        }
     }
 }
