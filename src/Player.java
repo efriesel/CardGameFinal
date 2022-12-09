@@ -107,7 +107,7 @@ public class Player {
         points = 0;
         bestPoints = 0;
         setElim(false);
-        lastPot = 0;
+        lastPot = -1;
     }
     public String getName(){
         return name;
@@ -143,8 +143,10 @@ public class Player {
         System.out.println("] $" + money);
         System.out.println("Press enter to continue");
     }
-    public static void printHand(Deck d, int money){
+    public static void printHand(Deck d, int money, String name){
         Scanner s = new Scanner(System.in);
+        System.out.println(name + "'s Best Hand and Money (press enter to reveal)");
+        s.nextLine();
         System.out.print("[ ");
         for (Card c : d.getCards()){
             System.out.print(c);

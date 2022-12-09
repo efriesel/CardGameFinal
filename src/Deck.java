@@ -158,7 +158,7 @@ public class Deck {
         cardsLeft = cards.size();
         for (int i = cardsLeft - 1; i > 0; i--){
              int r = (int)(Math.random() * (i + 1));
-             Card c = cards.get(i - 1);
+             Card c = cards.get(i);
              c = cards.set(r, c);
              cards.set(i, c);
         }
