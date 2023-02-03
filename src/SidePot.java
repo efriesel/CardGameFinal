@@ -13,6 +13,13 @@ public class SidePot {
 
     private int pot;
 
+    private int bet;
+    public int getBet() {
+        return bet;
+    }
+
+
+
     public int getNumPlayers() {
         return numPlayers;
     }
@@ -25,13 +32,19 @@ public class SidePot {
 
 
 
-    public SidePot(int money, ArrayList<Player> p){
+    public SidePot(int bet, ArrayList<Player> p){
         players = new ArrayList<Player>();
         for (int i = 0; i < p.size(); i++){
             players.add(p.get(i));
         }
-        pot = money;
+        pot = bet;
         numPlayers = p.size();
+    }
+    public SidePot(int bet, Player p){
+        players = new ArrayList<Player>();
+        players.add(p);
+        this.bet = bet;
+        this.pot = bet;
     }
 
     public ArrayList<Player> getPlayers(){
