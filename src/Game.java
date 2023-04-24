@@ -67,7 +67,7 @@ public class Game {
                 i--;
                 playerCount--;
             }
-            players.get(i).setDeck(new Deck());
+            players.get(i).setHand(new Deck());
         }
     }
 }

@@ -36,20 +36,20 @@ public class Bet {
                 }
                 else if (in.charAt(0) == ('c')){
                     pot += bet;
-                    playersIn.get(i).setMoney(players.get(i).getMoney() - bet);
+                    playersIn.get(i).setMoney(playersIn.get(i).getMoney() - bet);
                     if (playersIn.get(i).getLastBet() != bet){
-                        playersIn.get(i).setMoney(players.get(i).getMoney() + players.get(i).getLastBet());
+                        playersIn.get(i).setMoney(playersIn.get(i).getMoney() + players.get(i).getLastBet());
                         playersIn.get(i).setLastBet(bet);
                     }
                     calls++;
-//                    if (players.get(i).getMoney() == 0){
-//                        numBetters--;
-//                        calls--;
-//                        players.get(i).setLastPot(pots.size());
-//                    }
-//                    else if (allIn > 0){
-//                        players.get(i).setLastPot(players.get(i).getLastPot() + 1);
-//                    }
+                    if (players.get(i).getMoney() == 0){
+                        numBetters--;
+                        calls--;
+                        players.get(i).setLastPot(pots.size());
+                    }
+                    else if (allIn > 0){
+                        players.get(i).setLastPot(players.get(i).getLastPot() + 1);
+                    }
                 }
                 else if (in.charAt(0) == 'a'){
                     if (playersIn.get(i).getMoney() < bet) {
@@ -61,17 +61,17 @@ public class Bet {
                         numBetters--;
                         players.get(i).setMoney(0);
                     }
-//                    else if (players.get(i).getMoney() >= bet) {
-//                        bet = players.get(i).getMoney();
-//                        pot += bet;
-//                        players.get(i).setMoney(players.get(i).getMoney() + players.get(i).getLastBet());
-//                        players.get(i).setLastBet(bet);
-//                        allIn++;
-//                        allInBettor.add(i);
-//                        numBetters--;
-//                        players.get(i).setLastPot(pots.size());
-//                        calls = 0;
-//                    }
+                    else if (players.get(i).getMoney() >= bet) {
+                        bet = playersIn.get(i).getMoney();
+                        pot += bet;
+                        players.get(i).setMoney(players.get(i).getMoney() + players.get(i).getLastBet());
+                        players.get(i).setLastBet(bet);
+                        allIn++;
+                        allInBettor.add(i);
+                        numBetters--;
+                        players.get(i).setLastPot(pots.size());
+                        calls = 0;
+                    }
 //                }
 //                else {
 //                    inBet = 0;

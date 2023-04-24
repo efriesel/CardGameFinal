@@ -19,9 +19,6 @@ public class Round {
     int allIn;
 
     ArrayList<Integer> allInBettor;
-
-
-
     int numBetters;
     private int minBet;
 
@@ -294,6 +291,8 @@ public class Round {
         }
         System.out.println("Money has been updated, make the best of decisions");
     }
+
+    // UPDATE TO SORT LIST OF PLAYERS BY BEST TO WORST HAND USING ARRAYLIST
     public ArrayList<Player> findWinner(ArrayList<Player> p, int current){
         int bestScore = 0;
         ArrayList<Player> winners = new ArrayList<Player>();
