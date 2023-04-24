@@ -13,12 +13,6 @@ public class Card {
         this.suit = suit;
         this.point = point;
     }
-    public Card(String rank, String suit, int point, boolean isAce){
-        this.rank = rank;
-        this.suit = suit;
-        this.point = point;
-        this.isAce = isAce;
-    }
 
     public String getRank() {
         return rank;

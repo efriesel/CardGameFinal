@@ -34,7 +34,7 @@ public class Game {
         setPlayers();
         bet = INITIAL_BET;
         while (playerCount > 1) {
-            Round r = new Round(playerCount, deck, players, bet);
+            new Round(playerCount, deck, players, bet);
             setPlayersInGame();
             bet += BET_INCREASE_AMOUNT;
         }
