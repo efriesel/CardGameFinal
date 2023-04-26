@@ -7,16 +7,10 @@ public class Game {
     private static final int INITIAL_BET = 50;
 
     private static final int BET_INCREASE_AMOUNT = 50;
-    private String[] ranks;
-    private String[] suits;
-    private int[] values;
-
+    private final GameViewer window;
     int bet;
     private int playerCount;
-
-
     private Deck deck;
-
     private ArrayList<Player> players;
 
 
@@ -26,11 +20,12 @@ public class Game {
 
     public Game(){
         Round.printInstructions();
-        ranks = new String[]{"2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King", "Ace"};
-        suits = new String[]{"Clubs", "Diamonds", "Hearts", "Spades"};
-        values = new int[]{1,2,3,4,5,6,11,20,37,70,135,264,517};
+        String[] ranks = new String[]{"2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King", "Ace"};
+        String[] suits = new String[]{"Clubs", "Diamonds", "Hearts", "Spades"};
+        int[] values = new int[]{1, 2, 3, 4, 5, 6, 11, 20, 37, 70, 135, 264, 517};
         deck = new Deck(ranks, suits, values);
         setPlayers();
+        window = new GameViewer(this, players);
         bet = INITIAL_BET;
         while (playerCount > 1) {
             new Round(playerCount, deck, players, bet);
@@ -68,5 +63,6 @@ public class Game {
             }
             players.get(i).setHand(new Deck());
         }
+        window.setPlayerCount(playerCount);
     }
 }

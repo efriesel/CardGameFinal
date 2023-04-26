@@ -18,28 +18,28 @@ public class Bet {
         playersIn.addAll(players);
         int i = 0;
         while (calls != playersIn.size()) {
-            if (call) {
-                players.get(i).setInputtedMoney(players.get(i).getInputtedMoney() + bet);
-                calls++;
-            }
-            else if (bet) {
-                bet = newBet;
-                players.get(i).setInputtedMoney(players.get(i).getInputtedMoney() + bet);
-                calls = 1;
-            }
-            else if (fold) {
-                playersIn.remove(i);
-                players.get(i).setElim(true);
-            }
-            else if (allIn) {
-                playersIn.remove(i);
-                if (players.get(i).getMoney() - players.get(i).getInputtedMoney() > bet)
-                    bet = players.get(i).getMoney() - players.get(i).getInputtedMoney();
-                players.get(i).setInputtedMoney(players.get(i).getMoney());
-            }
-            i++;
-            if (i == playersIn.size())
-                i = 0;
+//            if (call) {
+//                players.get(i).setInputtedMoney(players.get(i).getInputtedMoney() + bet);
+//                calls++;
+//            }
+//            else if (bet) {
+//                bet = newBet;
+//                players.get(i).setInputtedMoney(players.get(i).getInputtedMoney() + bet);
+//                calls = 1;
+//            }
+//            else if (fold) {
+//                playersIn.remove(i);
+//                players.get(i).setElim(true);
+//            }
+//            else if (allIn) {
+//                playersIn.remove(i);
+//                if (players.get(i).getMoney() - players.get(i).getInputtedMoney() > bet)
+//                    bet = players.get(i).getMoney() - players.get(i).getInputtedMoney();
+//                players.get(i).setInputtedMoney(players.get(i).getMoney());
+//            }
+//            i++;
+//            if (i == playersIn.size())
+//                i = 0;
         }
         return playersIn;
     }
