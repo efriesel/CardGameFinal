@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 public class Deck {
@@ -12,7 +13,7 @@ public class Deck {
     private boolean hasFourPair;
 
     private int pointTotal;
-
+    //this is going to run setPoints too many times.
     public int getPoints() {
         setPoints();
         return points;
@@ -26,23 +27,22 @@ public class Deck {
 
 
     private ArrayList<Card> cards;
-
     public void setCardsLeft(int cardsLeft) {
         this.cardsLeft = cardsLeft;
     }
-
     private int cardsLeft;
-
-    private static final ArrayList<Integer> POINT_ORDER = new ArrayList<>(Arrays.asList(1,2,3,4,5,6,11,20,37,70,135,264,517));
-
-    private static final ArrayList<String> RANK_ORDER = new ArrayList<>(Arrays.asList("2", "3", "4","5","6","7","8","9","10","Jack", "Queen", "King", "Ace"));
-
+    private static final ArrayList<Integer> POINT_ORDER = new ArrayList<>(Arrays.asList(1,2,3,4,5,6,
+                                                                            11,20,37,70,135,264,517));
+    private static final ArrayList<String> RANK_ORDER = new ArrayList<>(Arrays.asList("2", "3", "4","5","6","7","8","9",
+                                                                                "10","Jack", "Queen", "King", "Ace"));
     public Deck(String[] rank, String[] suits, int[] point){
         cards = new ArrayList<Card>();
         cardsLeft = rank.length * suits.length;
-        for (int i = 0; i < suits.length; i++) {
-            for (int j = 0; j < rank.length; j++) {
-                Card c = new Card(rank[j], suits[i], point[j]);
+        int imageOrder = 0;
+        for (int i = 0; i < rank.length; i++) {
+            for (int j = 0; j < suits.length; j++) {
+                Card c = new Card(rank[i], suits[j], point[i], new ImageIcon("Resources/Cards/" + Integer.toString(imageOrder) + ".png").getImage());
+                imageOrder++;
                 cards.add(c);
             }
         }
@@ -53,29 +53,46 @@ public class Deck {
         for (int i = 0; i < c.size(); i++)
             cards.add(c.get(i));
     }
-
-
     public Deck(){
         cards = new ArrayList<Card>();
     }
-
-
-
-
-
     public ArrayList<Card> getCards(){
         return cards;
     }
-
     public void burn(){
         cardsLeft--;
     }
-
     public int getSize(){
         return cards.size();
     }
+    public void add(Card c){
+        cards.add(c);
+    }
+    public void setCards(ArrayList<Card> cards) {
+        this.cards = cards;
+    }
+    public boolean isEmpty(){
+        return cardsLeft == 0;
+    }
+    public int getCardsLeft() {
+        return cardsLeft;
+    }
+    public Card deal() {
+        if (cards.isEmpty())
+            return null;
+        cardsLeft--;
+        return cards.get(cardsLeft);
 
-
+    }
+    public void shuffle(){
+        cardsLeft = cards.size();
+        for (int i = cardsLeft - 1; i > 0; i--){
+            int r = (int)(Math.random() * (i + 1));
+            Card c = cards.get(i);
+            c = cards.set(r, c);
+            cards.set(i, c);
+        }
+    }
     private void setPoints(){
         sort();
         if (hasStraight() && hasFlush()){
@@ -130,39 +147,7 @@ public class Deck {
             points = pointTotal;
 
     }
-    public void add(Card c){
-        cards.add(c);
-    }
 
-    public void setCards(ArrayList<Card> cards) {
-        this.cards = cards;
-    }
-
-    public boolean isEmpty(){
-        return cardsLeft == 0;
-    }
-
-    public int getCardsLeft() {
-        return cardsLeft;
-    }
-
-    public Card deal() {
-        if (cards.isEmpty())
-            return null;
-        cardsLeft--;
-        return cards.get(cardsLeft);
-
-    }
-
-    public void shuffle(){
-        cardsLeft = cards.size();
-        for (int i = cardsLeft - 1; i > 0; i--){
-             int r = (int)(Math.random() * (i + 1));
-             Card c = cards.get(i);
-             c = cards.set(r, c);
-             cards.set(i, c);
-        }
-    }
 
     public void sort() {
         for (int i = 0; i < cards.size(); i++){
@@ -183,7 +168,8 @@ public class Deck {
         int[] pairs = new int[2];
         for (int i = 0; i < cards.size() - 1; i++){
             int value = cards.get(i).getPoint();
-            if (i < cards.size() - 3 && value == cards.get(i + 1).getPoint() && value == cards.get(i + 2).getPoint() && value == cards.get(i + 3).getPoint()){
+            if (i < cards.size() - 3 && value == cards.get(i + 1).getPoint() && value == cards.get(i + 2).getPoint() &&
+                                                                                value == cards.get(i + 3).getPoint()){
                 hasFourPair = true;
                 pairs[current] = RANK_ORDER.indexOf(cards.get(i).getRank());
                 return pairs;
@@ -236,7 +222,8 @@ public class Deck {
 
     public boolean hasFlush(){
         String s = cards.get(0).getSuit();
-        if (s.equals(cards.get(1).getSuit()) && s.equals(cards.get(2).getSuit()) && s.equals(cards.get(3).getSuit()) && s.equals(cards.get(4).getSuit())) {
+        if (s.equals(cards.get(1).getSuit()) && s.equals(cards.get(2).getSuit()) && s.equals(cards.get(3).getSuit()) &&
+                                                                                    s.equals(cards.get(4).getSuit())) {
             hasFlush = true;
             return true;
         }

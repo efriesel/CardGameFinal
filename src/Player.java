@@ -6,24 +6,17 @@ import java.util.Scanner;
 
 public class Player {
     private String name;
-    private int points;
     private int bestPoints;
     private Deck hand;
-
-    private Deck bestHand;
     private Deck currentHand;
     private int money;
     private int inputtedMoney;
-
-    private int lastBet;
-    public int lastPot;
     private boolean elim;
 
 
     public Player(String name, int money) {
         this.name = name;
         this.money = money;
-        points = 0;
         elim = false;
         hand = new Deck();
         bestPoints = 0;
@@ -120,22 +113,6 @@ public class Player {
 
     public void setInputtedMoney(int inputtedMoney) {
         this.inputtedMoney = inputtedMoney;
-    }
-
-    public int getLastBet() {
-        return lastBet;
-    }
-
-    public void setLastBet(int lastBet) {
-        this.lastBet = lastBet;
-    }
-
-    public int getLastPot() {
-        return lastPot;
-    }
-
-    public void setLastPot(int lastPot) {
-        this.lastPot = lastPot;
     }
 
     public boolean isElim() {

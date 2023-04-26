@@ -1,7 +1,7 @@
 import java.util.Scanner;
 import java.util.ArrayList;
 public class Game {
-    private static final int MAX_PLAYERS = 5;
+    private static final int MAX_PLAYERS = 4;
     private static final int INITIAL_MONEY = 1000;
 
     private static final int INITIAL_BET = 50;
@@ -27,10 +27,9 @@ public class Game {
     public Game(){
         Round.printInstructions();
         ranks = new String[]{"2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King", "Ace"};
-        suits = new String[]{"Spades", "Clubs", "Hearts", "Diamonds"};
+        suits = new String[]{"Clubs", "Diamonds", "Hearts", "Spades"};
         values = new int[]{1,2,3,4,5,6,11,20,37,70,135,264,517};
         deck = new Deck(ranks, suits, values);
-
         setPlayers();
         bet = INITIAL_BET;
         while (playerCount > 1) {
