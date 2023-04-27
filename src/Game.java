@@ -1,7 +1,6 @@
 import java.util.Scanner;
 import java.util.ArrayList;
 public class Game {
-    private static final int MAX_PLAYERS = 4;
     private static final int INITIAL_MONEY = 1000;
 
     private static final int INITIAL_BET = 50;
@@ -24,7 +23,7 @@ public class Game {
         int[] values = new int[]{1, 2, 3, 4, 5, 6, 11, 20, 37, 70, 135, 264, 517};
         deck = new Deck(ranks, suits, values);
         setPlayers();
-        window = new GameViewer(this, players);
+        window = new GameViewer(this);
         bet = INITIAL_BET;
         while (playerCount > 1) {
             new Round(playerCount, deck, players, bet);
