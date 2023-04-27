@@ -5,9 +5,11 @@ public class Bet {
     ArrayList<Player> players;
     int minBet;
     ArrayList<Player> money = new ArrayList<>();
-    public Bet (ArrayList<Player> players, int minBet){
+    GameViewer window;
+    public Bet (ArrayList<Player> players, int minBet, GameViewer window){
         this.players = players;
         this.minBet = minBet;
+        this.window = window;
         money.addAll(players);
         money = sort(money);
     }
@@ -17,7 +19,7 @@ public class Bet {
         ArrayList<Player> playersIn = new ArrayList<>();
         playersIn.addAll(players);
         int i = 0;
-        while (calls != playersIn.size()) {
+//        while (calls != playersIn.size()) {
 //            if (call) {
 //                players.get(i).setInputtedMoney(players.get(i).getInputtedMoney() + bet);
 //                calls++;
@@ -40,7 +42,7 @@ public class Bet {
 //            i++;
 //            if (i == playersIn.size())
 //                i = 0;
-        }
+//        }
         return playersIn;
     }
 

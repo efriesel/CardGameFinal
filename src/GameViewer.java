@@ -7,7 +7,7 @@ import java.awt.event.KeyListener;
 import java.awt.image.BufferStrategy;
 import java.util.ArrayList;
 
-public class GameViewer extends JFrame implements KeyListener, ActionListener {
+public class GameViewer extends JFrame implements ActionListener {
     private static final int MAX_PLAYERS = 4;
 
     public final Font HEADER_FONT = new Font("Sans-Serif", 1, 36);
@@ -24,10 +24,9 @@ public class GameViewer extends JFrame implements KeyListener, ActionListener {
     public final int WELCOME_SCREEN = 0;
     public final int NUMBER_OF_PLAYER_COLLECTION = 1;
     public final int NAME_COLLECTION = 2;
-    public final int GAME_PLAY = 3;
-    private final Game game;
+    public final int BET_PLAY = 3;
+    private Game game;
 
-    private static final int INITIAL_MONEY = 1000;
     private int state;
     private ArrayList<Player> players;
     private int playerCount;
@@ -45,7 +44,6 @@ public class GameViewer extends JFrame implements KeyListener, ActionListener {
         setLocationRelativeTo(null);
         setTitle("Poker");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        addKeyListener(this);
         setLayout(null);
         submit.setBounds(WINDOW_WIDTH / 2 - BUTTON_WIDTH / 2, Y_HEIGHT / 4 * 3 + HEADER_HEIGHT - BUTTON_HEIGHT * 2
                 - BUTTON_HEIGHT / 2, BUTTON_WIDTH, BUTTON_HEIGHT);
@@ -72,7 +70,7 @@ public class GameViewer extends JFrame implements KeyListener, ActionListener {
             add(submit);
             add(field);
         }
-        else if (state == GAME_PLAY){
+        else if (state == BET_PLAY){
 
         }
     }
@@ -98,7 +96,6 @@ public class GameViewer extends JFrame implements KeyListener, ActionListener {
                     if (currentPlayers > 1 && currentPlayers <= MAX_PLAYERS) {
                         state++;
                         playerCount = currentPlayers;
-                        System.out.println("works");
                         count = 0;
                     }
                 }
@@ -108,7 +105,7 @@ public class GameViewer extends JFrame implements KeyListener, ActionListener {
         else if (state == NAME_COLLECTION) {
             String current = field.getText();
             if (current != null) {
-                players.add(new Player(current, INITIAL_MONEY));
+                players.add(new Player(current, Game.INITIAL_MONEY));
                 count++;
                 repaint();
             }
@@ -116,9 +113,13 @@ public class GameViewer extends JFrame implements KeyListener, ActionListener {
                 state++;
                 remove(field);
                 remove(submit);
+                System.out.println("works");
+                game.setPlayers(players);
+                repaint();
+                game.setDeck();
             }
         }
-        else if (state == GAME_PLAY){
+        else if (state == BET_PLAY){
 
         }
     }
@@ -173,19 +174,10 @@ public class GameViewer extends JFrame implements KeyListener, ActionListener {
     public void setPlayerCount(int playerCount) {
         this.playerCount = playerCount;
     }
-
-    @Override
-    public void keyTyped(KeyEvent e) {
-
+    public int getPlayerCount(){
+        return playerCount;
     }
-
-    @Override
-    public void keyPressed(KeyEvent e) {
-
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-
+    public ArrayList<Player> getPlayers(){
+        return players;
     }
 }

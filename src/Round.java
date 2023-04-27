@@ -12,33 +12,37 @@ public class Round {
 
     private ArrayList<Player> players;
     private ArrayList<Player> playersIn;
+    private GameViewer window;
 
     private int minBet;
 
-    public Round(int playerCount, Deck deck, ArrayList<Player> players, int minBet){
-        this.players = new ArrayList<Player>();
+    private boolean hasRiver;
+
+    public Round(int playerCount, Deck deck, ArrayList<Player> players, int minBet, GameViewer window){
+        this.players = players;
         this.playerCount = playerCount;
         this.deck = deck;
         this.minBet = minBet;
+        this.window = window;
         river = new Deck();
-        for (Player p : players) {
-            this.players.add(p);
-        }
-        playRound();
+        initialDeal();
+        window.repaint();
     }
 
     public void playRound(){
-        initialDeal();
-        Bet b = new Bet(players, minBet);
+        Bet b = new Bet(players, minBet, window);
         playersIn = b.bet();
+        window.repaint();
         river(3);
-        b = new Bet(playersIn, 0);
+        hasRiver = true;
+        window.repaint();
+        b = new Bet(playersIn, 0, window);
         playersIn = b.bet();
         river(1);
-        b = new Bet(playersIn, 0);
+        b = new Bet(playersIn, 0, window);
         playersIn = b.bet();
         river(1);
-        b = new Bet(playersIn, 0);
+        b = new Bet(playersIn, 0, window);
         b.bet();
         setBestHands();
         giveWins();
@@ -66,6 +70,15 @@ public class Round {
             river.add(deck.deal());
         }
     }
+
+    public Deck getRiver() {
+        return river;
+    }
+
+    public boolean isHasRiver() {
+        return hasRiver;
+    }
+
     public void giveWins(){
         boolean under = false;
         boolean win = false;
@@ -85,8 +98,8 @@ public class Round {
             else {
                 winners.get(0).setMoney(winners.get(0).getMoney() + manage.get(i).getInputtedMoney());
                 manage.get(i).setMoney(manage.get(i).getMoney() - manage.get(i).getInputtedMoney());
-                manage.remove(i);
                 winners.remove(manage.get(i));
+                manage.remove(i);
             }
             if (i == manage.size()){
                 if (under){
