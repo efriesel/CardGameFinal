@@ -4,7 +4,7 @@ import java.util.Scanner;
 public class Bet {
     ArrayList<Player> players;
     int minBet;
-    ArrayList<Player> money;
+    ArrayList<Player> money = new ArrayList<>();
     public Bet (ArrayList<Player> players, int minBet){
         this.players = players;
         this.minBet = minBet;

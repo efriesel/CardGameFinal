@@ -19,7 +19,6 @@ public class Game {
     }
 
     public Game(){
-        Round.printInstructions();
         String[] ranks = new String[]{"2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King", "Ace"};
         String[] suits = new String[]{"Clubs", "Diamonds", "Hearts", "Spades"};
         int[] values = new int[]{1, 2, 3, 4, 5, 6, 11, 20, 37, 70, 135, 264, 517};
@@ -36,22 +35,24 @@ public class Game {
     }
 
     public void setPlayers() {
-        Scanner s = new Scanner(System.in);
-        System.out.println("Enter Player Count from 2 to " + MAX_PLAYERS);
-        int in = s.nextInt();
-        while (in <= 1 || in > MAX_PLAYERS) {
-            s.nextLine();
-            System.out.println("Enter Player Count from 2 to " + MAX_PLAYERS);
-            in = s.nextInt();
-        }
-        s.nextLine();
-        playerCount = in;
+//        Scanner s = new Scanner(System.in);
+//        System.out.println("Enter Player Count from 2 to " + MAX_PLAYERS);
+//        int in = s.nextInt();
+//        while (in <= 1 || in > MAX_PLAYERS) {
+//            s.nextLine();
+//            System.out.println("Enter Player Count from 2 to " + MAX_PLAYERS);
+//            in = s.nextInt();
+//        }
+//        s.nextLine();
+        playerCount = 2;
         players = new ArrayList<Player>();
-        for (int i = 0; i < playerCount; i++){
-            System.out.println("Enter name of player " + (i + 1)) ;
-            String name = s.nextLine();
-            players.add(new Player(name, INITIAL_MONEY));
-        }
+        players.add(new Player("e", INITIAL_MONEY));
+        players.add(new Player("f", INITIAL_MONEY));
+//        for (int i = 0; i < playerCount; i++){
+//            System.out.println("Enter name of player " + (i + 1)) ;
+//            String name = s.nextLine();
+//            players.add(new Player(name, INITIAL_MONEY));
+//        }
 
     }
     public void setPlayersInGame(){

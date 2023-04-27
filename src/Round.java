@@ -43,11 +43,6 @@ public class Round {
         setBestHands();
         giveWins();
     }
-    public static void printInstructions(){
-        Scanner s = new Scanner(System.in);
-        System.out.println("Welcome to a game of poker. If you do not know how to play, go to https://bicyclecards.com/how-to-play/basics-of-poker");
-        s.nextLine();
-    }
     public void initialDeal(){
         deck.setCardsLeft(deck.getSize());
         deck.shuffle();
