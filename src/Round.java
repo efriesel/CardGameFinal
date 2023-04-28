@@ -11,7 +11,6 @@ public class Round {
     private Deck river;
 
     private ArrayList<Player> players;
-    private ArrayList<Player> playersIn;
     private GameViewer window;
 
     private int minBet;
@@ -30,22 +29,22 @@ public class Round {
     }
 
     public void playRound(){
-        Bet b = new Bet(players, minBet, window);
-        playersIn = b.bet();
-        window.repaint();
-        river(3);
-        hasRiver = true;
-        window.repaint();
-        b = new Bet(playersIn, 0, window);
-        playersIn = b.bet();
-        river(1);
-        b = new Bet(playersIn, 0, window);
-        playersIn = b.bet();
-        river(1);
-        b = new Bet(playersIn, 0, window);
-        b.bet();
-        setBestHands();
-        giveWins();
+//        Bet b = new Bet(players, minBet, window);
+//        playersIn = b.bet();
+//        window.repaint();
+//        river(3);
+//        hasRiver = true;
+//        window.repaint();
+//        b = new Bet(playersIn, 0, window);
+//        playersIn = b.bet();
+//        river(1);
+//        b = new Bet(playersIn, 0, window);
+//        playersIn = b.bet();
+//        river(1);
+//        b = new Bet(playersIn, 0, window);
+//        b.bet();
+//        setBestHands();
+//        giveWins();
     }
     public void initialDeal(){
         deck.setCardsLeft(deck.getSize());

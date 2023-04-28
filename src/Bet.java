@@ -5,45 +5,56 @@ public class Bet {
     ArrayList<Player> players;
     int minBet;
     ArrayList<Player> money = new ArrayList<>();
+    ArrayList<Player> playersIn;
+
     GameViewer window;
+    int bet;
+    int calls;
+    int current;
     public Bet (ArrayList<Player> players, int minBet, GameViewer window){
         this.players = players;
         this.minBet = minBet;
         this.window = window;
         money.addAll(players);
         money = sort(money);
-    }
-    public ArrayList<Player> bet() {
-        int calls = 0;
-        int bet = minBet;
-        ArrayList<Player> playersIn = new ArrayList<>();
+        current = 0;
+        calls = 0;
+        playersIn = new ArrayList<>();
         playersIn.addAll(players);
-        int i = 0;
-//        while (calls != playersIn.size()) {
-//            if (call) {
-//                players.get(i).setInputtedMoney(players.get(i).getInputtedMoney() + bet);
-//                calls++;
-//            }
-//            else if (bet) {
-//                bet = newBet;
-//                players.get(i).setInputtedMoney(players.get(i).getInputtedMoney() + bet);
-//                calls = 1;
-//            }
-//            else if (fold) {
-//                playersIn.remove(i);
-//                players.get(i).setElim(true);
-//            }
-//            else if (allIn) {
-//                playersIn.remove(i);
-//                if (players.get(i).getMoney() - players.get(i).getInputtedMoney() > bet)
-//                    bet = players.get(i).getMoney() - players.get(i).getInputtedMoney();
-//                players.get(i).setInputtedMoney(players.get(i).getMoney());
-//            }
-//            i++;
-//            if (i == playersIn.size())
-//                i = 0;
-//        }
-        return playersIn;
+        bet = minBet;
+    }
+    public boolean bet(String in) {
+
+        if (in.equals("call")) {
+            players.get(current).setInputtedMoney(players.get(current).getInputtedMoney() + bet);
+            calls++;
+        }
+        else if (in.equals("fold")) {
+            playersIn.remove(current);
+            players.get(current).setElim(true);
+        }
+        else {
+            playersIn.remove(current);
+            if (players.get(current).getMoney() - players.get(current).getInputtedMoney() > bet)
+                bet = players.get(current).getMoney() - players.get(current).getInputtedMoney();
+            players.get(current).setInputtedMoney(players.get(current).getMoney());
+        }
+        current++;
+        if (current == playersIn.size())
+            current = 0;
+        if (calls == playersIn.size()){
+            return true;
+        }
+        return false;
+    }
+
+    public void bet(int bet){
+        this.bet = bet;
+        players.get(current).setInputtedMoney(players.get(current).getInputtedMoney() + bet);
+        calls = 1;
+        current++;
+        if (current == playersIn.size())
+            current = 0;
     }
 
     public ArrayList<Player> sort(ArrayList<Player> players) {
@@ -107,19 +118,4 @@ public class Bet {
         }
         return order;
     }
-//        }
-//        while (allIn > 0){
-//            ArrayList<Player> sidePlayers = new ArrayList<Player>();
-//            for (int j = 0; j < playerCount; j++) {
-//                if ((players.get(j).getLastPot() >= pots.size() - 1)) {
-//                    sidePlayers.add(players.get(j));
-//                    players.get(j).setLastPot(players.get(j).getLastPot() + 1);
-//                }
-//            }
-//            SidePot p = new SidePot(bet * sidePlayers.size(), sidePlayers);
-//            pots.add(p);
-//            players.get(allInBettor.get(allIn - 1)).setMoney(0);
-//            allIn--;
-//        }
-//
 }

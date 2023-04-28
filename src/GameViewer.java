@@ -19,21 +19,31 @@ public class GameViewer extends JFrame implements ActionListener {
     public final int Y_HEIGHT = WINDOW_HEIGHT - HEADER_HEIGHT;
     public final int BUTTON_WIDTH = 100;
     public final int BUTTON_HEIGHT = 50;
+    private final int CARD_HEIGHT = Y_HEIGHT / 6;
+    private final int CARD_WIDTH = CARD_HEIGHT * 5 / 7;
+    private final int RIVER_START = WINDOW_WIDTH / 10;
+    private final int GAP_BEFORE_EDGE = 20;
+    private final int CARD_SPACING = 20;
     private final Image BACKGROUND_IMAGE = new ImageIcon("Resources/Background.jpeg").getImage();
-    private final Image BACK_OF_CARD = new ImageIcon("Resources/Back.png").getImage();
+    private final Image BACK_OF_CARD_FRONT = new ImageIcon("Resources/Back.png").getImage();
+    private final Image BACK_OF_CARD_SIDE = new ImageIcon("Resources/BackSide.png").getImage();
     public final int WELCOME_SCREEN = 0;
     public final int NUMBER_OF_PLAYER_COLLECTION = 1;
     public final int NAME_COLLECTION = 2;
-    public final int BET_PLAY = 3;
+    public final int PRE_DEAL = 3;
+    public final int BET_PLAY = 4;
     private Game game;
-
+    private Bet b;
     private int state;
     private ArrayList<Player> players;
-    private int playerCount;
 
+    private ArrayList<Player> playersIn;
+    private int playerCount;
+    private int burn;
+    private ArrayList<Card> river;
+    private int turn;
     JButton submit = new JButton("Submit");
     JTextField field = new JTextField();
-
     int count;
 
     public GameViewer (Game game) {
@@ -50,6 +60,7 @@ public class GameViewer extends JFrame implements ActionListener {
         submit.addActionListener(this);
         field.setBounds(WINDOW_WIDTH / 4, Y_HEIGHT / 11 * 5 + HEADER_HEIGHT, WINDOW_WIDTH / 2,
                 Y_HEIGHT / 11);
+        turn = -1;
         setVisible(true);
     }
 
@@ -61,17 +72,22 @@ public class GameViewer extends JFrame implements ActionListener {
             add(submit);
         }
         else if (state == NUMBER_OF_PLAYER_COLLECTION){
-            displayPlayerCountRequirements(g);
             add(submit);
             add(field);
+            displayPlayerCountRequirements(g);
         }
         else if (state == NAME_COLLECTION) {
-            askForPlayers(g);
             add(submit);
             add(field);
+            askForPlayers(g);
+        }
+        else if (state == PRE_DEAL){
+            add(submit);
+            printOutlines(g);
+            askForReady(g);
         }
         else if (state == BET_PLAY){
-
+            printOutlines(g);
         }
     }
 
@@ -82,7 +98,6 @@ public class GameViewer extends JFrame implements ActionListener {
             if (s != null && s.equals("Submit")) {
                 System.out.println("works");
                 state++;
-                add(field);
                 repaint();
             }
         }
@@ -90,7 +105,6 @@ public class GameViewer extends JFrame implements ActionListener {
             String s = e.getActionCommand();
             if (s != null && s.equals("Submit")) {
                 String current = field.getText();
-                System.out.println(current);
                 if ((isNumeric(current))) {
                     int currentPlayers = Integer.parseInt(current);
                     if (currentPlayers > 1 && currentPlayers <= MAX_PLAYERS) {
@@ -112,19 +126,25 @@ public class GameViewer extends JFrame implements ActionListener {
             if (count == playerCount){
                 state++;
                 remove(field);
-                remove(submit);
                 System.out.println("works");
                 game.setPlayers(players);
-                repaint();
                 game.setDeck();
+            }
+        }
+        else if (state == PRE_DEAL){
+            String s = e.getActionCommand();
+            if (s != null && s.equals("Submit")) {
+                System.out.println("works");
+                state++;
+                remove(field);
+                remove(submit);
+                repaint();
             }
         }
         else if (state == BET_PLAY){
 
         }
     }
-
-
 
     private void printBackground(Graphics g){
         g.drawImage(BACKGROUND_IMAGE, 0, HEADER_HEIGHT, WINDOW_WIDTH, WINDOW_HEIGHT, this);
@@ -148,7 +168,7 @@ public class GameViewer extends JFrame implements ActionListener {
         g.drawString("Enter number of players, from 2 to " + MAX_PLAYERS, WINDOW_WIDTH / 4,
                 Y_HEIGHT / 4 + HEADER_HEIGHT + SMALL_FONT.getSize());
     }
-
+    //IF TIME, MAKE IT SO THERE IS A CHARACTER LIMIT FOR NAMES
     public void askForPlayers(Graphics g){
         g.setColor(Color.LIGHT_GRAY);
         g.fillRect(WINDOW_WIDTH / 4, Y_HEIGHT / 4 + HEADER_HEIGHT, WINDOW_WIDTH / 2, Y_HEIGHT / 2);
@@ -156,6 +176,48 @@ public class GameViewer extends JFrame implements ActionListener {
         g.setColor(Color.BLACK);
         g.drawString("Enter the name of player " + (count + 1), WINDOW_WIDTH / 4,
                 Y_HEIGHT / 4 + HEADER_HEIGHT + SMALL_FONT.getSize());
+    }
+    public void printOutlines(Graphics g){
+        g.setColor(Color.WHITE);
+        for (int i = 0; i < Game.RIVER_STACKS; i++){
+            g.drawRect(RIVER_START + (CARD_WIDTH * i) + CARD_SPACING, HEADER_HEIGHT + GAP_BEFORE_EDGE +
+                            HEADER_HEIGHT, CARD_WIDTH, CARD_HEIGHT);
+        }
+        int start = GAP_BEFORE_EDGE + CARD_WIDTH + HEADER_HEIGHT;
+        int current = 0;
+        int x;
+        g.setFont(SMALL_FONT);
+        for (int i = 0; i < MAX_PLAYERS; i++){
+            if (i % 2 == 0) {
+                x = GAP_BEFORE_EDGE;
+                current = start + CARD_WIDTH * 2;
+            }
+            else {
+                x = WINDOW_WIDTH - GAP_BEFORE_EDGE - CARD_HEIGHT;
+            }
+            if (i != turn) {
+                g.drawRect(x, current, CARD_HEIGHT, CARD_WIDTH);
+                if (i < playerCount)
+                    g.drawString(players.get(i).getName(), x, current + CARD_WIDTH * 6 / 5);
+            }
+        }
+    }
+    public void askForReady(Graphics g){
+        g.setColor(Color.LIGHT_GRAY);
+        g.fillRect(WINDOW_WIDTH / 4, Y_HEIGHT / 4 + HEADER_HEIGHT, WINDOW_WIDTH / 2, Y_HEIGHT / 2);
+        g.setFont(SMALL_FONT);
+        g.setColor(Color.BLACK);
+        g.drawString("Submit When Ready", WINDOW_WIDTH / 4,
+                Y_HEIGHT / 4 + HEADER_HEIGHT + SMALL_FONT.getSize());
+    }
+    public void printCards(Graphics g){
+        for (int i = 0; i < players.size(); i++){
+
+        }
+    }
+
+    public void printRiver(Graphics g){
+
     }
     public static boolean isNumeric(String strNum) {
         if (strNum == null) {
@@ -174,10 +236,13 @@ public class GameViewer extends JFrame implements ActionListener {
     public void setPlayerCount(int playerCount) {
         this.playerCount = playerCount;
     }
-    public int getPlayerCount(){
-        return playerCount;
+    public void setTurn(int turn) {
+        this.turn = turn;
     }
-    public ArrayList<Player> getPlayers(){
-        return players;
+    public void setBurn(int burn){
+        this.burn = burn;
+    }
+    public void setRiver(ArrayList<Card> river){
+        this.river = river;
     }
 }

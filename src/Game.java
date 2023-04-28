@@ -6,6 +6,8 @@ public class Game {
     private static final int INITIAL_BET = 50;
 
     private static final int BET_INCREASE_AMOUNT = 50;
+    // ADD EXTRA FOR THE BURN PILE;
+    public static final int RIVER_STACKS = 6;
     private final GameViewer window;
     int bet;
     private int playerCount;
@@ -27,11 +29,10 @@ public class Game {
         int[] values = new int[]{1, 2, 3, 4, 5, 6, 11, 20, 37, 70, 135, 264, 517};
         deck = new Deck(ranks, suits, values);
         bet = INITIAL_BET;
-//        while (playerCount > 1) {
-//            new Round(playerCount, deck, players, bet, window);
-//            setPlayersInGame();
-//            bet += BET_INCREASE_AMOUNT;
-//        }
+    }
+
+    public void run() {
+        new Round(playerCount, deck, players, bet, window);
     }
 
     public void setPlayers(ArrayList<Player> players){
