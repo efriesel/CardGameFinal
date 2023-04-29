@@ -72,22 +72,23 @@ public class GameViewer extends JFrame implements ActionListener {
             add(submit);
         }
         else if (state == NUMBER_OF_PLAYER_COLLECTION){
+            displayPlayerCountRequirements(g);
             add(submit);
             add(field);
-            displayPlayerCountRequirements(g);
         }
         else if (state == NAME_COLLECTION) {
+            askForPlayers(g);
             add(submit);
             add(field);
-            askForPlayers(g);
         }
         else if (state == PRE_DEAL){
-            add(submit);
             printOutlines(g);
             askForReady(g);
+            add(submit);
         }
         else if (state == BET_PLAY){
             printOutlines(g);
+            printCards(g);
         }
     }
 
@@ -98,6 +99,7 @@ public class GameViewer extends JFrame implements ActionListener {
             if (s != null && s.equals("Submit")) {
                 System.out.println("works");
                 state++;
+                add(field);
                 repaint();
             }
         }
@@ -111,9 +113,9 @@ public class GameViewer extends JFrame implements ActionListener {
                         state++;
                         playerCount = currentPlayers;
                         count = 0;
+                        repaint();
                     }
                 }
-                repaint();
             }
         }
         else if (state == NAME_COLLECTION) {
@@ -138,6 +140,8 @@ public class GameViewer extends JFrame implements ActionListener {
                 state++;
                 remove(field);
                 remove(submit);
+                game.run();
+                b = game.startBet();
                 repaint();
             }
         }
@@ -179,8 +183,10 @@ public class GameViewer extends JFrame implements ActionListener {
     }
     public void printOutlines(Graphics g){
         g.setColor(Color.WHITE);
+        g.drawRect(RIVER_START - CARD_WIDTH / 2 + CARD_SPACING, HEADER_HEIGHT + GAP_BEFORE_EDGE +
+                HEADER_HEIGHT, CARD_WIDTH, CARD_HEIGHT);
         for (int i = 0; i < Game.RIVER_STACKS; i++){
-            g.drawRect(RIVER_START + (CARD_WIDTH * i) + CARD_SPACING, HEADER_HEIGHT + GAP_BEFORE_EDGE +
+            g.drawRect(RIVER_START + (CARD_WIDTH * (i + 1)) + CARD_SPACING, HEADER_HEIGHT + GAP_BEFORE_EDGE +
                             HEADER_HEIGHT, CARD_WIDTH, CARD_HEIGHT);
         }
         int start = GAP_BEFORE_EDGE + CARD_WIDTH + HEADER_HEIGHT;
@@ -190,15 +196,18 @@ public class GameViewer extends JFrame implements ActionListener {
         for (int i = 0; i < MAX_PLAYERS; i++){
             if (i % 2 == 0) {
                 x = GAP_BEFORE_EDGE;
-                current = start + CARD_WIDTH * 2;
+                current = start + CARD_WIDTH * (2 + i);;
             }
             else {
                 x = WINDOW_WIDTH - GAP_BEFORE_EDGE - CARD_HEIGHT;
             }
             if (i != turn) {
                 g.drawRect(x, current, CARD_HEIGHT, CARD_WIDTH);
-                if (i < playerCount)
+                if (i < playerCount) {
                     g.drawString(players.get(i).getName(), x, current + CARD_WIDTH * 6 / 5);
+                    g.drawString(String.valueOf(players.get(i).getMoney()), x, current + CARD_WIDTH * 6 / 5 +
+                            SMALL_FONT.getSize());
+                }
             }
         }
     }
@@ -211,12 +220,24 @@ public class GameViewer extends JFrame implements ActionListener {
                 Y_HEIGHT / 4 + HEADER_HEIGHT + SMALL_FONT.getSize());
     }
     public void printCards(Graphics g){
+        int start = GAP_BEFORE_EDGE + CARD_WIDTH + HEADER_HEIGHT;
+        int current = 0;
+        int x;
         for (int i = 0; i < players.size(); i++){
-
+            if (i % 2 == 0) {
+                x = GAP_BEFORE_EDGE;
+                current = start + CARD_WIDTH * (2 + i);
+            }
+            else {
+                x = WINDOW_WIDTH - GAP_BEFORE_EDGE - CARD_HEIGHT;
+            }
+            if (i != turn && !players.get(i).isElim()) {
+                g.drawImage(BACK_OF_CARD_SIDE, x, current, CARD_HEIGHT, CARD_WIDTH, this);
+            }
         }
     }
 
-    public void printRiver(Graphics g){
+    public void printRiver(Graphics g, ArrayList<Card> river){
 
     }
     public static boolean isNumeric(String strNum) {
@@ -238,9 +259,6 @@ public class GameViewer extends JFrame implements ActionListener {
     }
     public void setTurn(int turn) {
         this.turn = turn;
-    }
-    public void setBurn(int burn){
-        this.burn = burn;
     }
     public void setRiver(ArrayList<Card> river){
         this.river = river;

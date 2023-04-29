@@ -7,12 +7,14 @@ public class Game {
 
     private static final int BET_INCREASE_AMOUNT = 50;
     // ADD EXTRA FOR THE BURN PILE;
-    public static final int RIVER_STACKS = 6;
+    public static final int RIVER_STACKS = 5;
     private final GameViewer window;
     int bet;
     private int playerCount;
     private Deck deck;
     private ArrayList<Player> players;
+
+    Round r;
 
 
     public static void main(String[] args) {
@@ -32,7 +34,11 @@ public class Game {
     }
 
     public void run() {
-        new Round(playerCount, deck, players, bet, window);
+        r = new Round(playerCount, deck, players, bet, window);
+    }
+
+    public Bet startBet(){
+        return r.startBet();
     }
 
     public void setPlayers(ArrayList<Player> players){

@@ -15,7 +15,11 @@ public class Round {
 
     private int minBet;
 
+    private int turn;
+
     private boolean hasRiver;
+
+    private Bet b;
 
     public Round(int playerCount, Deck deck, ArrayList<Player> players, int minBet, GameViewer window){
         this.players = players;
@@ -25,6 +29,7 @@ public class Round {
         this.window = window;
         river = new Deck();
         initialDeal();
+        turn = 0;
         window.repaint();
     }
 
@@ -45,6 +50,10 @@ public class Round {
 //        b.bet();
 //        setBestHands();
 //        giveWins();
+    }
+    public Bet startBet(){
+        b = new Bet(players, minBet, turn, window);
+        return b;
     }
     public void initialDeal(){
         deck.setCardsLeft(deck.getSize());

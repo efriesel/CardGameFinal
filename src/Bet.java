@@ -11,16 +11,17 @@ public class Bet {
     int bet;
     int calls;
     int current;
-    public Bet (ArrayList<Player> players, int minBet, GameViewer window){
+    public Bet (ArrayList<Player> players, int minBet, int turn, GameViewer window){
         this.players = players;
         this.minBet = minBet;
         this.window = window;
         money.addAll(players);
         money = sort(money);
-        current = 0;
         calls = 0;
         playersIn = new ArrayList<>();
         playersIn.addAll(players);
+        current = turn;
+        window.setTurn(current);
         bet = minBet;
     }
     public boolean bet(String in) {
