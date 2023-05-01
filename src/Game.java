@@ -44,6 +44,13 @@ public class Game {
         r.river(river);
         return r.getRiver();
     }
+    public void river(int in){
+        r.river(in);
+    }
+    public void update(){
+        r.update();
+        setPlayersInGame();
+    }
 
     public void setPlayers(ArrayList<Player> players){
         this.players = players;

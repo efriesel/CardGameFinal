@@ -10,6 +10,7 @@ public class Round {
     private ArrayList<Card> river;
 
     private ArrayList<Player> players;
+    private ArrayList<Player> playersIn;
     private GameViewer window;
 
     private int minBet;
@@ -30,23 +31,10 @@ public class Round {
         window.repaint();
     }
 
-    public void playRound(){
-//        Bet b = new Bet(players, minBet, window);
-//        playersIn = b.bet();
-//        window.repaint();
-//        river(3);
-//        hasRiver = true;
-//        window.repaint();
-//        b = new Bet(playersIn, 0, window);
-//        playersIn = b.bet();
-//        river(1);
-//        b = new Bet(playersIn, 0, window);
-//        playersIn = b.bet();
-//        river(1);
-//        b = new Bet(playersIn, 0, window);
-//        b.bet();
-//        setBestHands();
-//        giveWins();
+    public void update(){
+        playersIn = new ArrayList<>();
+        setBestHands();
+        giveWins();
     }
     public Bet startBet(){
         b = new Bet(players, minBet, turn, window);
@@ -64,8 +52,11 @@ public class Round {
         }
     }
     public void setBestHands(){
-        for (Player p : b.getPlayersIn()){
-            p.getBestHand(river);
+        for (Player p : players){
+            if (!p.isElim()) {
+                p.getBestHand(river);
+                playersIn.add(p);
+            }
         }
     }
 
@@ -120,7 +111,7 @@ public class Round {
     // UPDATE TO SORT LIST OF PLAYERS BY BEST TO WORST HAND USING ARRAYLIST
     public ArrayList<Player> findWinner(){
         ArrayList<Player> order = new ArrayList<>();
-        order.addAll(b.getPlayersIn());
+        order.addAll(playersIn);
         return mergeSort(order);
 
     }

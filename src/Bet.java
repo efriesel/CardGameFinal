@@ -25,14 +25,13 @@ public class Bet {
         bet = minBet;
     }
     public boolean bet(String in) {
-
         if (in.equals("Call")) {
             players.get(current).setInputtedMoney(players.get(current).getInputtedMoney() + bet);
             calls++;
         }
         else if (in.equals("Fold")) {
+            playersIn.get(current).setElim(true);
             playersIn.remove(current);
-            players.get(current).setElim(true);
         }
         else {
             playersIn.remove(current);
@@ -43,6 +42,9 @@ public class Bet {
         current++;
         if (current == playersIn.size())
             current = 0;
+        if (playersIn.size() <= 1){
+            return true;
+        }
         window.setTurn(current);
         if (calls == playersIn.size()){
             return true;
@@ -50,13 +52,18 @@ public class Bet {
         return false;
     }
 
-    public void bet(int bet){
-        this.bet = bet;
+    public boolean bet(int inBet){
+        if (inBet < bet || inBet % 10 != 0){
+            return false;
+        }
+        bet = inBet;
         players.get(current).setInputtedMoney(players.get(current).getInputtedMoney() + bet);
         calls = 1;
         current++;
+        window.setTurn(current);
         if (current == playersIn.size())
             current = 0;
+        return true;
     }
     public ArrayList<Player> getPlayersIn(){
         return playersIn;
