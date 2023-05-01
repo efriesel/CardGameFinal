@@ -26,19 +26,19 @@ public class Player {
         hand = new Deck(deck);
     }
 
-    public Deck getBestHand(Deck river) {
+    public Deck getBestHand(ArrayList<Card> river) {
         Deck bestHand = new Deck();
         int points;
         bestPoints = 0;
-        for (int i = 0; i < river.getSize() - 2; i++) {
-            for (int j = i + 1; j < river.getSize() - 1; j++) {
-                for (int k = j + 1; k < river.getSize(); k++) {
+        for (int i = 0; i < river.size() - 2; i++) {
+            for (int j = i + 1; j < river.size() - 1; j++) {
+                for (int k = j + 1; k < river.size(); k++) {
                     currentHand = new Deck();
                     currentHand.add(hand.getCards().get(0));
                     currentHand.add(hand.getCards().get(1));
-                    currentHand.add(river.getCards().get(i));
-                    currentHand.add(river.getCards().get(j));
-                    currentHand.add(river.getCards().get(k));
+                    currentHand.add(river.get(i));
+                    currentHand.add(river.get(j));
+                    currentHand.add(river.get(k));
                     points = currentHand.getPoints();
                     if (bestPoints < points) {
                         bestPoints = points;
@@ -51,15 +51,6 @@ public class Player {
             }
         }
         return bestHand;
-    }
-    public void printHand(){
-        System.out.print("[ ");
-        for (Card c : hand.getCards()){
-            System.out.print(c);
-            System.out.print(", ");
-        }
-        System.out.println("] $" + money);
-        System.out.println("Press enter to continue");
     }
     public void printHand(Graphics g){
 

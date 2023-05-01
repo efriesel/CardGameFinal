@@ -17,8 +17,9 @@ public class GameViewer extends JFrame implements ActionListener {
     public final int WINDOW_WIDTH = 800;
     public final int WINDOW_HEIGHT = 822;
     public final int Y_HEIGHT = WINDOW_HEIGHT - HEADER_HEIGHT;
-    public final int BUTTON_WIDTH = 100;
+    public final int BUTTON_WIDTH = WINDOW_WIDTH / 6;
     public final int BUTTON_HEIGHT = 50;
+    public final int BUTTON_SPACING = WINDOW_WIDTH / 24;
     private final int CARD_HEIGHT = Y_HEIGHT / 6;
     private final int CARD_WIDTH = CARD_HEIGHT * 5 / 7;
     private final int RIVER_START = WINDOW_WIDTH / 10;
@@ -32,6 +33,7 @@ public class GameViewer extends JFrame implements ActionListener {
     public final int NAME_COLLECTION = 2;
     public final int PRE_DEAL = 3;
     public final int BET_PLAY = 4;
+    public final int INPUT_BET = 5;
     private Game game;
     private Bet b;
     private int state;
@@ -39,12 +41,17 @@ public class GameViewer extends JFrame implements ActionListener {
 
     private ArrayList<Player> playersIn;
     private int playerCount;
-    private int burn;
     private ArrayList<Card> river;
     private int turn;
-    JButton submit = new JButton("Submit");
-    JTextField field = new JTextField();
-    int count;
+    private JButton submit = new JButton("Submit");
+    private JButton bet = new JButton("Bet");
+    private JButton call = new JButton("Call");
+    private JButton reveal = new JButton("Reveal");
+    private JButton fold = new JButton("Fold");
+    private JButton allIn = new JButton("All In");
+    private JTextField field = new JTextField();
+    private int count;
+    private boolean show;
 
     public GameViewer (Game game) {
         this.game = game;
@@ -57,7 +64,18 @@ public class GameViewer extends JFrame implements ActionListener {
         setLayout(null);
         submit.setBounds(WINDOW_WIDTH / 2 - BUTTON_WIDTH / 2, Y_HEIGHT / 4 * 3 + HEADER_HEIGHT - BUTTON_HEIGHT * 2
                 - BUTTON_HEIGHT / 2, BUTTON_WIDTH, BUTTON_HEIGHT);
+        bet.setBounds(0, WINDOW_HEIGHT - BUTTON_HEIGHT - 100, BUTTON_WIDTH, BUTTON_HEIGHT);
+        call.setBounds(BUTTON_WIDTH + BUTTON_SPACING, WINDOW_HEIGHT - BUTTON_HEIGHT - 100, BUTTON_WIDTH, BUTTON_HEIGHT);
+        reveal.setBounds(2 * (BUTTON_WIDTH + BUTTON_SPACING), WINDOW_HEIGHT - BUTTON_HEIGHT - 100, BUTTON_WIDTH, BUTTON_HEIGHT);
+        fold.setBounds(3 * (BUTTON_WIDTH + BUTTON_SPACING), WINDOW_HEIGHT - BUTTON_HEIGHT - 100, BUTTON_WIDTH, BUTTON_HEIGHT);
+        allIn.setBounds(4 * (BUTTON_WIDTH + BUTTON_SPACING), WINDOW_HEIGHT - BUTTON_HEIGHT - 100, BUTTON_WIDTH, BUTTON_HEIGHT);
         submit.addActionListener(this);
+        bet.addActionListener(this);
+        call.addActionListener(this);
+        reveal.addActionListener(this);
+        fold.addActionListener(this);
+        allIn.addActionListener(this);
+        this.validate();
         field.setBounds(WINDOW_WIDTH / 4, Y_HEIGHT / 11 * 5 + HEADER_HEIGHT, WINDOW_WIDTH / 2,
                 Y_HEIGHT / 11);
         turn = -1;
@@ -83,12 +101,21 @@ public class GameViewer extends JFrame implements ActionListener {
         }
         else if (state == PRE_DEAL){
             printOutlines(g);
+            printRiver(g);
             askForReady(g);
             add(submit);
         }
         else if (state == BET_PLAY){
             printOutlines(g);
             printCards(g);
+            printRiver(g);
+            printTurn(g);
+            add(bet);
+            add(call);
+            add(reveal);
+            add(fold);
+            add(allIn);
+            Toolkit.getDefaultToolkit().sync();
         }
     }
 
@@ -129,8 +156,12 @@ public class GameViewer extends JFrame implements ActionListener {
                 state++;
                 remove(field);
                 System.out.println("works");
+                count = 0;
                 game.setPlayers(players);
                 game.setDeck();
+                game.run();
+                river = game.riverStart(3);
+                repaint();
             }
         }
         else if (state == PRE_DEAL){
@@ -138,14 +169,28 @@ public class GameViewer extends JFrame implements ActionListener {
             if (s != null && s.equals("Submit")) {
                 System.out.println("works");
                 state++;
-                remove(field);
                 remove(submit);
-                game.run();
+                show = false;
                 b = game.startBet();
                 repaint();
             }
         }
         else if (state == BET_PLAY){
+            String s = e.getActionCommand();
+            if (s.equals("Bet")){
+                state = INPUT_BET;
+                repaint();
+            }
+            else if (s.equals("Reveal")){
+
+            }
+            else{
+                if (b.bet(s)) {
+
+                }
+            }
+        }
+        else if (state == INPUT_BET){
 
         }
     }
@@ -236,8 +281,15 @@ public class GameViewer extends JFrame implements ActionListener {
             }
         }
     }
-
-    public void printRiver(Graphics g, ArrayList<Card> river){
+    public void printRiver(Graphics g){
+        g.drawImage(BACK_OF_CARD_FRONT, RIVER_START - CARD_WIDTH / 2 + CARD_SPACING, HEADER_HEIGHT +
+                GAP_BEFORE_EDGE + HEADER_HEIGHT, CARD_WIDTH, CARD_HEIGHT, this);
+        for (int i = 0; i < river.size(); i++){
+            g.drawImage(river.get(i).getImage(), RIVER_START + (CARD_WIDTH * (i + 1)) + CARD_SPACING,
+                    HEADER_HEIGHT + GAP_BEFORE_EDGE + HEADER_HEIGHT, CARD_WIDTH, CARD_HEIGHT, this);
+        }
+    }
+    public void printTurn(Graphics g){
 
     }
     public static boolean isNumeric(String strNum) {
@@ -259,8 +311,5 @@ public class GameViewer extends JFrame implements ActionListener {
     }
     public void setTurn(int turn) {
         this.turn = turn;
-    }
-    public void setRiver(ArrayList<Card> river){
-        this.river = river;
     }
 }

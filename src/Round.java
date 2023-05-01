@@ -1,6 +1,5 @@
 
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public class Round {
 
@@ -8,7 +7,7 @@ public class Round {
 
     private Deck deck;
 
-    private Deck river;
+    private ArrayList<Card> river;
 
     private ArrayList<Player> players;
     private GameViewer window;
@@ -16,8 +15,6 @@ public class Round {
     private int minBet;
 
     private int turn;
-
-    private boolean hasRiver;
 
     private Bet b;
 
@@ -27,7 +24,7 @@ public class Round {
         this.deck = deck;
         this.minBet = minBet;
         this.window = window;
-        river = new Deck();
+        river = new ArrayList<>();
         initialDeal();
         turn = 0;
         window.repaint();
@@ -67,7 +64,7 @@ public class Round {
         }
     }
     public void setBestHands(){
-        for (Player p : players){
+        for (Player p : b.getPlayersIn()){
             p.getBestHand(river);
         }
     }
@@ -79,13 +76,11 @@ public class Round {
         }
     }
 
-    public Deck getRiver() {
+    public ArrayList<Card> getRiver(){
         return river;
     }
 
-    public boolean isHasRiver() {
-        return hasRiver;
-    }
+
 
     public void giveWins(){
         boolean under = false;
@@ -125,10 +120,7 @@ public class Round {
     // UPDATE TO SORT LIST OF PLAYERS BY BEST TO WORST HAND USING ARRAYLIST
     public ArrayList<Player> findWinner(){
         ArrayList<Player> order = new ArrayList<>();
-        for (Player p : players){
-            if (!p.isElim())
-                order.add(p);
-        }
+        order.addAll(b.getPlayersIn());
         return mergeSort(order);
 
     }

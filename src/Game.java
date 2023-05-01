@@ -40,6 +40,10 @@ public class Game {
     public Bet startBet(){
         return r.startBet();
     }
+    public ArrayList<Card> riverStart(int river){
+        r.river(river);
+        return r.getRiver();
+    }
 
     public void setPlayers(ArrayList<Player> players){
         this.players = players;

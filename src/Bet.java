@@ -26,11 +26,11 @@ public class Bet {
     }
     public boolean bet(String in) {
 
-        if (in.equals("call")) {
+        if (in.equals("Call")) {
             players.get(current).setInputtedMoney(players.get(current).getInputtedMoney() + bet);
             calls++;
         }
-        else if (in.equals("fold")) {
+        else if (in.equals("Fold")) {
             playersIn.remove(current);
             players.get(current).setElim(true);
         }
@@ -43,6 +43,7 @@ public class Bet {
         current++;
         if (current == playersIn.size())
             current = 0;
+        window.setTurn(current);
         if (calls == playersIn.size()){
             return true;
         }
@@ -56,6 +57,9 @@ public class Bet {
         current++;
         if (current == playersIn.size())
             current = 0;
+    }
+    public ArrayList<Player> getPlayersIn(){
+        return playersIn;
     }
 
     public ArrayList<Player> sort(ArrayList<Player> players) {

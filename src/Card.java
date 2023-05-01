@@ -12,6 +12,9 @@ public class Card {
         this.point = point;
         this.image = image;
     }
+    public Image getImage(){
+        return image;
+    }
     public String getRank() {
         return rank;
     }
