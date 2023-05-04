@@ -26,6 +26,8 @@ public class Bet {
     }
     public boolean bet(String in) {
         if (in.equals("Call")) {
+            if (players.get(current).getMoney() < players.get(current).getInputtedMoney() + bet)
+                return false;
             players.get(current).setInputtedMoney(players.get(current).getInputtedMoney() + bet);
             calls++;
         }
@@ -43,6 +45,9 @@ public class Bet {
         current++;
         if (current == playersIn.size())
             current = 0;
+        if (playersIn.size() <= 1){
+            return true;
+        }
         if (playersIn.get(current).getMoney() == playersIn.get(current).getInputtedMoney())
             playersIn.remove(current);
         if (playersIn.size() <= 1){
@@ -59,6 +64,8 @@ public class Bet {
         if (inBet < bet || inBet % 10 != 0){
             return false;
         }
+        if (players.get(current).getMoney() < players.get(current).getInputtedMoney() + inBet)
+            return false;
         bet = inBet;
         players.get(current).setInputtedMoney(players.get(current).getInputtedMoney() + bet);
         calls = 1;
