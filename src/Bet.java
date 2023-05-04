@@ -34,14 +34,17 @@ public class Bet {
             playersIn.remove(current);
         }
         else {
-            playersIn.remove(current);
             if (players.get(current).getMoney() - players.get(current).getInputtedMoney() > bet)
                 bet = players.get(current).getMoney() - players.get(current).getInputtedMoney();
+            else
+                playersIn.remove(current);
             players.get(current).setInputtedMoney(players.get(current).getMoney());
         }
         current++;
         if (current == playersIn.size())
             current = 0;
+        if (playersIn.get(current).getMoney() == playersIn.get(current).getInputtedMoney())
+            playersIn.remove(current);
         if (playersIn.size() <= 1){
             return true;
         }
@@ -67,6 +70,9 @@ public class Bet {
     }
     public ArrayList<Player> getPlayersIn(){
         return playersIn;
+    }
+    public int getBet(){
+        return bet;
     }
 
     public ArrayList<Player> sort(ArrayList<Player> players) {
@@ -115,7 +121,7 @@ public class Bet {
                 i++;
             }
             else {
-                order.add(list1.get(j));
+                order.add(list2.get(j));
                 j++;
             }
         }

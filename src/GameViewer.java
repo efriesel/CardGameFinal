@@ -116,14 +116,14 @@ public class GameViewer extends JFrame implements ActionListener {
         }
         else if (state == PRE_DEAL){
             printOutlines(g);
-            printRiver(g);
             askForReady(g);
             add(submit);
         }
         else if (state == BET_PLAY){
             printOutlines(g);
             printCards(g);
-            printRiver(g);
+            if (count != 0)
+                printRiver(g);
             printTurn(g);
             setButtons(g);
         }
@@ -135,7 +135,8 @@ public class GameViewer extends JFrame implements ActionListener {
             remove(allIn);
             printOutlines(g);
             printCards(g);
-            printRiver(g);
+            if (count != 0)
+                printRiver(g);
             printTurn(g);
             getInput(g);
         }
@@ -182,7 +183,6 @@ public class GameViewer extends JFrame implements ActionListener {
                 game.setPlayers(players);
                 game.setDeck();
                 game.run();
-                river = game.riverStart(3);
                 repaint();
             }
         }
@@ -193,7 +193,7 @@ public class GameViewer extends JFrame implements ActionListener {
                 state++;
                 remove(submit);
                 show = false;
-                b = game.startBet();
+                b = game.startBet(Game.INITIAL_BET);
                 repaint();
             }
         }
@@ -208,22 +208,28 @@ public class GameViewer extends JFrame implements ActionListener {
             else if (s.equals("Reveal")){
                 if (show)
                     show = false;
+
                 else
                     show = true;
             }
             else{
                 if (b.bet(s)) {
                     playersIn = b.getPlayersIn();
-                    if (count == 2) {
+                    if (count == 3 || playersIn.size() <= 1) {
                         game.update();
                         state = PRE_DEAL;
                         count = 0;
                         game.run();
-                        river = game.riverStart(3);
                         repaint();
+                    }
+                    else if (count == 0) {
+                        river = game.riverStart(3);
+                        b = game.startBet(0);
+                        count++;
                     }
                     else {
                         game.river(1);
+                        b = game.startBet(0);
                         count++;
                     }
 
@@ -240,6 +246,8 @@ public class GameViewer extends JFrame implements ActionListener {
                     int in = Integer.parseInt(current);
                     if (b.bet(in)){
                         state = BET_PLAY;
+                        submit.setBounds(submit.getX() - submit.getWidth() / 2, submit.getY(), submit.getWidth(),
+                                submit.getHeight());
                         remove(submit);
                         remove(cancel);
                         remove(field);

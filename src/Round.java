@@ -25,6 +25,8 @@ public class Round {
         this.deck = deck;
         this.minBet = minBet;
         this.window = window;
+        playersIn = new ArrayList<>();
+        playersIn.addAll(players);
         river = new ArrayList<>();
         initialDeal();
         turn = 0;
@@ -36,8 +38,8 @@ public class Round {
         setBestHands();
         giveWins();
     }
-    public Bet startBet(){
-        b = new Bet(players, minBet, turn, window);
+    public Bet startBet(int bet){
+        b = new Bet(playersIn, bet, turn, window);
         return b;
     }
     public void initialDeal(){
@@ -82,6 +84,8 @@ public class Round {
         while (!win){
             if (winners.get(0) == manage.get(i))
                 i++;
+            if (i == manage.size())
+                return;
             if (manage.get(i).getInputtedMoney() > winners.get(0).getInputtedMoney()) {
                 under = true;
                 winners.get(0).setMoney(winners.get(0).getMoney() + winners.get(0).getInputtedMoney());
@@ -156,7 +160,7 @@ public class Round {
                 i++;
             }
             else {
-                order.add(list1.get(j));
+                order.add(list2.get(j));
                 j++;
             }
         }

@@ -3,7 +3,7 @@ import java.util.ArrayList;
 public class Game {
     public static final int INITIAL_MONEY = 1000;
 
-    private static final int INITIAL_BET = 50;
+    public static final int INITIAL_BET = 50;
 
     private static final int BET_INCREASE_AMOUNT = 50;
     // ADD EXTRA FOR THE BURN PILE;
@@ -37,8 +37,8 @@ public class Game {
         r = new Round(playerCount, deck, players, bet, window);
     }
 
-    public Bet startBet(){
-        return r.startBet();
+    public Bet startBet(int bet){
+        return r.startBet(bet);
     }
     public ArrayList<Card> riverStart(int river){
         r.river(river);
@@ -58,13 +58,17 @@ public class Game {
     }
 
     public void setPlayersInGame(){
-        for (int i = 0; i < playerCount; i++){
+        int i = 0;
+        while (i < playerCount) {
             if (players.get(i).getMoney() == 0){
                 players.remove(i);
-                i--;
                 playerCount--;
             }
-            players.get(i).setHand(new Deck());
+            else {
+                players.get(i).setHand(new Deck());
+                players.get(i).setElim(false);
+                i++;
+            }
         }
         window.setPlayerCount(playerCount);
     }
