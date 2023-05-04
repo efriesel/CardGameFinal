@@ -223,8 +223,8 @@ public class GameViewer extends JFrame implements ActionListener {
                         repaint();
                     }
                     else {
-                        game.run();
                         game.river(1);
+                        count++;
                     }
 
                 }
