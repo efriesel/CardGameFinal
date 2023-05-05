@@ -9,14 +9,11 @@ import java.util.ArrayList;
 
 public class GameViewer extends JFrame implements ActionListener {
     private static final int MAX_PLAYERS = 4;
-
-    public final Font HEADER_FONT = new Font("Sans-Serif", 1, 36);
-    public final Font ENDING_FONT = new Font("Sans-Serif", 1, 50);
-    public final Font SMALL_FONT = new Font("Sans-Serif", 1, 20);
-    private final int HEADER_HEIGHT = 22;
-    public final int WINDOW_WIDTH = 800;
-    public final int WINDOW_HEIGHT = 822;
-    public final int Y_HEIGHT = WINDOW_HEIGHT - HEADER_HEIGHT;
+    public static final Font SMALL_FONT = new Font("Sans-Serif", 1, 20);
+    private static final int HEADER_HEIGHT = 22;
+    public static final int WINDOW_WIDTH = 800;
+    public static final int WINDOW_HEIGHT = 822;
+    public static final int Y_HEIGHT = WINDOW_HEIGHT - HEADER_HEIGHT;
     public final int BUTTON_WIDTH = WINDOW_WIDTH / 6;
     public final int BUTTON_HEIGHT = 50;
     public final int BUTTON_SPACING = WINDOW_WIDTH / 24;
@@ -61,6 +58,8 @@ public class GameViewer extends JFrame implements ActionListener {
     private Image field_image = new ImageIcon("Resources/Field.png").getImage();
     private int count;
     private boolean show;
+    private boolean roundWinner;
+    Player winner;
     private int pot;
 
     public GameViewer (Game game) {
@@ -93,13 +92,13 @@ public class GameViewer extends JFrame implements ActionListener {
         field.setBounds(WINDOW_WIDTH / 4, Y_HEIGHT / 11 * 5 + HEADER_HEIGHT, WINDOW_WIDTH / 2,
                 Y_HEIGHT / 11);
         turn = -1;
+        roundWinner = false;
         this.setLocationRelativeTo(null);
         setVisible(true);
     }
 
     public void paint(Graphics g)
     {
-        JPanel j = new JPanel(null);
         printBackground(g);
         if (state == WELCOME_SCREEN) {
             printInstructions(g);
@@ -118,6 +117,9 @@ public class GameViewer extends JFrame implements ActionListener {
         else if (state == PRE_DEAL){
             printOutlines(g);
             askForReady(g);
+            if (roundWinner){
+                winner.printWin(g);
+            }
             add(submit);
         }
         else if (state == BET_PLAY){
@@ -221,6 +223,7 @@ public class GameViewer extends JFrame implements ActionListener {
                         state = PRE_DEAL;
                         count = 0;
                         game.run();
+                        roundWinner = true;
                         repaint();
                         pot = 0;
                     }
@@ -442,5 +445,8 @@ public class GameViewer extends JFrame implements ActionListener {
     }
     public void setPot(int pot){
         this.pot = pot;
+    }
+    public void setRoundWinner(Player roundWinner){
+        this.winner = roundWinner;
     }
 }

@@ -83,6 +83,7 @@ public class Round {
         boolean win = false;
         ArrayList<Player> manage = new ArrayList<>(players);
         ArrayList<Player> winners = findWinner();
+        window.setRoundWinner(winners.get(0));
         int i = 0;
         while (!win){
             if (winners.get(0) == manage.get(i))

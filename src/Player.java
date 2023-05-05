@@ -9,6 +9,7 @@ public class Player {
     private int bestPoints;
     private Deck hand;
     private Deck currentHand;
+    private Deck bestHand;
     private int money;
     private int inputtedMoney;
     private int currentInputtedMoney;
@@ -27,8 +28,8 @@ public class Player {
         hand = new Deck(deck);
     }
 
-    public Deck getBestHand(ArrayList<Card> river) {
-        Deck bestHand = new Deck();
+    public void getBestHand(ArrayList<Card> river) {
+        bestHand = new Deck();
         int points;
         bestPoints = 0;
         for (int i = 0; i < river.size() - 2; i++) {
@@ -44,17 +45,18 @@ public class Player {
                     if (bestPoints < points) {
                         bestPoints = points;
                         bestHand = new Deck();
-                        for (int l = 0; l < 5; l++) {
-                            bestHand.add(currentHand.getCards().get(l));
-                        }
+                        ArrayList<Card> c = new ArrayList<>();
+                        c.addAll(currentHand.getCards());
+                        bestHand.setCards(c);
                     }
                 }
             }
         }
-        return bestHand;
     }
-    public void printHand(Graphics g){
-
+    public void printWin(Graphics g){
+        g.setFont(GameViewer.SMALL_FONT);
+        String winStatement = name + " has the Best Hand with a " + bestHand.getName();
+        g.drawString(winStatement, GameViewer.WINDOW_WIDTH / 2 - GameViewer.SMALL_FONT.getSize() * winStatement.length() / 4, GameViewer.Y_HEIGHT / 2);
     }
 
     public void addCard(Card c){
