@@ -24,8 +24,7 @@ public class Deck {
     private boolean hasFlush;
     private boolean hasStraight;
 
-
-
+    String name;
     private ArrayList<Card> cards;
     public void setCardsLeft(int cardsLeft) {
         this.cardsLeft = cardsLeft;

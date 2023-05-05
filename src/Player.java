@@ -11,6 +11,7 @@ public class Player {
     private Deck currentHand;
     private int money;
     private int inputtedMoney;
+    private int currentInputtedMoney;
     private boolean elim;
 
 
@@ -94,6 +95,14 @@ public class Player {
 
     public void setInputtedMoney(int inputtedMoney) {
         this.inputtedMoney = inputtedMoney;
+    }
+
+    public int getCurrentInputtedMoney() {
+        return currentInputtedMoney;
+    }
+
+    public void setCurrentInputtedMoney(int currentInputtedMoney) {
+        this.currentInputtedMoney = currentInputtedMoney;
     }
 
     public boolean isElim() {

@@ -67,6 +67,8 @@ public class Game {
             else {
                 players.get(i).setHand(new Deck());
                 players.get(i).setElim(false);
+                players.get(i).setInputtedMoney(0);
+                players.get(i).setCurrentInputtedMoney(0);
                 i++;
             }
         }

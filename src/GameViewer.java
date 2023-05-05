@@ -61,6 +61,7 @@ public class GameViewer extends JFrame implements ActionListener {
     private Image field_image = new ImageIcon("Resources/Field.png").getImage();
     private int count;
     private boolean show;
+    private int pot;
 
     public GameViewer (Game game) {
         this.game = game;
@@ -221,6 +222,7 @@ public class GameViewer extends JFrame implements ActionListener {
                         count = 0;
                         game.run();
                         repaint();
+                        pot = 0;
                     }
                     else if (count == 0) {
                         river = game.riverStart(3);
@@ -232,7 +234,6 @@ public class GameViewer extends JFrame implements ActionListener {
                         b = game.startBet(0);
                         count++;
                     }
-
                 }
                 show = false;
             }
@@ -304,10 +305,10 @@ public class GameViewer extends JFrame implements ActionListener {
             g.drawRect(RIVER_START + (CARD_WIDTH * (i + 1)) + CARD_SPACING, HEADER_HEIGHT + GAP_BEFORE_EDGE +
                             HEADER_HEIGHT, CARD_WIDTH, CARD_HEIGHT);
         }
+        g.setFont(SMALL_FONT);
         int start = GAP_BEFORE_EDGE + CARD_WIDTH + HEADER_HEIGHT;
         int current = 0;
         int x;
-        g.setFont(SMALL_FONT);
         for (int i = 0; i < MAX_PLAYERS; i++){
             if (i % 2 == 0) {
                 x = GAP_BEFORE_EDGE;
@@ -320,7 +321,8 @@ public class GameViewer extends JFrame implements ActionListener {
                 g.drawRect(x, current, CARD_HEIGHT, CARD_WIDTH);
                 if (i < playerCount) {
                     g.drawString(players.get(i).getName(), x, current + CARD_WIDTH * 6 / 5);
-                    g.drawString(String.valueOf(players.get(i).getMoney()), x, current + CARD_WIDTH * 6 / 5 +
+                    g.drawString(String.valueOf(players.get(i).getMoney() - players.get(i).getInputtedMoney() -
+                            players.get(i).getCurrentInputtedMoney()), x, current + CARD_WIDTH * 6 / 5 +
                             SMALL_FONT.getSize());
                 }
             }
@@ -338,6 +340,10 @@ public class GameViewer extends JFrame implements ActionListener {
         int start = GAP_BEFORE_EDGE + CARD_WIDTH + HEADER_HEIGHT;
         int current = 0;
         int x;
+        g.setFont(SMALL_FONT);
+        String bet = "Bet: " + String.valueOf(b.getBet()) + "   Pot: " + String.valueOf(pot);
+        g.drawString(bet, WINDOW_WIDTH / 2 - SMALL_FONT.getSize() * bet.length() / 2, HEADER_HEIGHT +
+                GAP_BEFORE_EDGE + CARD_HEIGHT + SMALL_FONT.getSize() * 3);
         for (int i = 0; i < players.size(); i++){
             if (i % 2 == 0) {
                 x = GAP_BEFORE_EDGE;
@@ -362,7 +368,8 @@ public class GameViewer extends JFrame implements ActionListener {
     public void printTurn(Graphics g){
         g.setColor(Color.WHITE);
         g.setFont(SMALL_FONT);
-        String name = "Player : " + players.get(turn).getName() + " Money: $" + players.get(turn).getMoney();
+        String name = "Player : " + players.get(turn).getName() + " Money: $" + (players.get(turn).getMoney() -
+                players.get(turn).getInputtedMoney() - players.get(turn).getCurrentInputtedMoney());
         g.drawString(name, WINDOW_WIDTH / 2 - (SMALL_FONT.getSize() * name.length()) / 4,
                 Y_HEIGHT / 5 * 4 + HEADER_HEIGHT);
         if (show){
@@ -432,5 +439,8 @@ public class GameViewer extends JFrame implements ActionListener {
     }
     public void setTurn(int turn) {
         this.turn = turn;
+    }
+    public void setPot(int pot){
+        this.pot = pot;
     }
 }

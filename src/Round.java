@@ -19,6 +19,8 @@ public class Round {
 
     private Bet b;
 
+    private int pot;
+
     public Round(int playerCount, Deck deck, ArrayList<Player> players, int minBet, GameViewer window){
         this.players = players;
         this.playerCount = playerCount;
@@ -28,6 +30,7 @@ public class Round {
         playersIn = new ArrayList<>();
         playersIn.addAll(players);
         river = new ArrayList<>();
+        pot = 0;
         initialDeal();
         turn = 0;
         window.repaint();
