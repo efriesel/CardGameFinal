@@ -49,7 +49,6 @@ public class Game {
     }
     public void update(){
         r.update();
-        setPlayersInGame();
     }
 
     public void setPlayers(ArrayList<Player> players){
@@ -73,6 +72,9 @@ public class Game {
             }
         }
         window.setPlayerCount(playerCount);
+        if (playerCount == 1){
+            window.win(players.get(0));
+        }
     }
 }
 

@@ -48,6 +48,7 @@ public class Player {
                         ArrayList<Card> c = new ArrayList<>();
                         c.addAll(currentHand.getCards());
                         bestHand.setCards(c);
+                        bestHand.setName(currentHand.getName());
                     }
                 }
             }

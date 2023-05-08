@@ -31,31 +31,31 @@ public class GameViewer extends JFrame implements ActionListener {
     public final int PRE_DEAL = 3;
     public final int BET_PLAY = 4;
     public final int INPUT_BET = 5;
-    private Game game;
+    public final int WIN = 6;
+    private final Game game;
     private Bet b;
     private int state;
-    private ArrayList<Player> players;
-
+    private final ArrayList<Player> players;
     private ArrayList<Player> playersIn;
     private int playerCount;
     private ArrayList<Card> river;
     private int turn;
-    private JButton submit = new JButton("Submit");
-    private Image submit_image = new ImageIcon("Resources/Submit.png").getImage();
-    private JButton cancel = new JButton("Cancel");
-    private Image cancel_image = new ImageIcon("Resources/Cancel.png").getImage();
-    private JButton bet = new JButton("Bet");
-    private Image bet_image = new ImageIcon("Resources/Bet.png").getImage();
-    private JButton call = new JButton("Call");
-    private Image call_image = new ImageIcon("Resources/Call.png").getImage();
-    private JButton reveal = new JButton("Reveal");
-    private Image reveal_image = new ImageIcon("Resources/Reveal.png").getImage();
-    private JButton fold = new JButton("Fold");
-    private Image fold_image = new ImageIcon("Resources/Fold.png").getImage();
-    private JButton allIn = new JButton("All In");
-    private Image allIn_image = new ImageIcon("Resources/All In.png").getImage();
-    private JTextField field = new JTextField();
-    private Image field_image = new ImageIcon("Resources/Field.png").getImage();
+    private final JButton submit = new JButton("Submit");
+    private final Image submit_image = new ImageIcon("Resources/Submit.png").getImage();
+    private final JButton cancel = new JButton("Cancel");
+    private final Image cancel_image = new ImageIcon("Resources/Cancel.png").getImage();
+    private final JButton bet = new JButton("Bet");
+    private final Image bet_image = new ImageIcon("Resources/Bet.png").getImage();
+    private final JButton call = new JButton("Call");
+    private final Image call_image = new ImageIcon("Resources/Call.png").getImage();
+    private final JButton reveal = new JButton("Reveal");
+    private final Image reveal_image = new ImageIcon("Resources/Reveal.png").getImage();
+    private final JButton fold = new JButton("Fold");
+    private final Image fold_image = new ImageIcon("Resources/Fold.png").getImage();
+    private final JButton allIn = new JButton("All In");
+    private final Image allIn_image = new ImageIcon("Resources/All In.png").getImage();
+    private final JTextField field = new JTextField();
+    private final Image field_image = new ImageIcon("Resources/Field.png").getImage();
     private int count;
     private boolean show;
     private boolean roundWinner;
@@ -143,6 +143,14 @@ public class GameViewer extends JFrame implements ActionListener {
             printTurn(g);
             getInput(g);
         }
+        else {
+            remove(bet);
+            remove(call);
+            remove(reveal);
+            remove(fold);
+            remove(allIn);
+            drawWin(g);
+        }
     }
 
     @Override
@@ -193,6 +201,10 @@ public class GameViewer extends JFrame implements ActionListener {
             String s = e.getActionCommand();
             if (s != null && s.equals("Submit")) {
                 System.out.println("works");
+                if (roundWinner){
+                    game.setPlayersInGame();
+                    game.run();
+                }
                 state++;
                 remove(submit);
                 show = false;
@@ -209,20 +221,15 @@ public class GameViewer extends JFrame implements ActionListener {
                 submit.setBounds(alter);
             }
             else if (s.equals("Reveal")){
-                if (show)
-                    show = false;
-
-                else
-                    show = true;
+                show = !show;
             }
             else{
                 if (b.bet(s)) {
                     playersIn = b.getPlayersIn();
-                    if (count == 3 || playersIn.size() <= 1) {
+                    if (count == 3) {
                         game.update();
                         state = PRE_DEAL;
                         count = 0;
-                        game.run();
                         roundWinner = true;
                         repaint();
                         pot = 0;
@@ -315,7 +322,7 @@ public class GameViewer extends JFrame implements ActionListener {
         for (int i = 0; i < MAX_PLAYERS; i++){
             if (i % 2 == 0) {
                 x = GAP_BEFORE_EDGE;
-                current = start + CARD_WIDTH * (2 + i);;
+                current = start + CARD_WIDTH * (2 + i);
             }
             else {
                 x = WINDOW_WIDTH - GAP_BEFORE_EDGE - CARD_HEIGHT;
@@ -344,7 +351,7 @@ public class GameViewer extends JFrame implements ActionListener {
         int current = 0;
         int x;
         g.setFont(SMALL_FONT);
-        String bet = "Bet: " + String.valueOf(b.getBet()) + "   Pot: " + String.valueOf(pot);
+        String bet = "Bet: " + b.getBet() + "   Pot: " + pot;
         g.drawString(bet, WINDOW_WIDTH / 2 - SMALL_FONT.getSize() * bet.length() / 2, HEADER_HEIGHT +
                 GAP_BEFORE_EDGE + CARD_HEIGHT + SMALL_FONT.getSize() * 3);
         for (int i = 0; i < players.size(); i++){
@@ -423,6 +430,18 @@ public class GameViewer extends JFrame implements ActionListener {
                 cancel.getHeight(), this);
 
     }
+    public void drawWin(Graphics g){
+        g.setColor(Color.LIGHT_GRAY);
+        g.fillRect(WINDOW_WIDTH / 4, Y_HEIGHT / 4 + HEADER_HEIGHT, WINDOW_WIDTH / 2, Y_HEIGHT / 2);
+        g.setFont(SMALL_FONT);
+        g.setColor(Color.BLACK);
+        String name = winner.getName() + " Wins";
+        g.drawString(name, WINDOW_WIDTH / 2 - SMALL_FONT.getSize() * name.length(), Y_HEIGHT / 2);
+    }
+    public void win(Player p){
+        winner = p;
+        state = WIN;
+    }
     public static boolean isNumeric(String strNum) {
         if (strNum == null) {
             return false;
@@ -434,9 +453,6 @@ public class GameViewer extends JFrame implements ActionListener {
         }
         return true;
     }
-
-
-
     public void setPlayerCount(int playerCount) {
         this.playerCount = playerCount;
     }
