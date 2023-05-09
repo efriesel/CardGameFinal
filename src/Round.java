@@ -5,47 +5,37 @@ public class Round {
 
     private final int playerCount;
 
-    private Deck deck;
+    private final Deck deck;
 
-    private ArrayList<Card> river;
+    private final ArrayList<Card> river;
 
-    private ArrayList<Player> players;
+    private final ArrayList<Player> players;
     private ArrayList<Player> playersIn;
     private int numPlayers;
-    private GameViewer window;
+    private final GameViewer window;
 
-    private int minBet;
+    private final int turn;
 
-    private int turn;
-
-    private Bet b;
-
-    private int pot;
-
-    public Round(int playerCount, Deck deck, ArrayList<Player> players, int minBet, GameViewer window){
+    public Round(int playerCount, Deck deck, ArrayList<Player> players, GameViewer window){
         this.players = players;
         this.playerCount = playerCount;
         this.deck = deck;
-        this.minBet = minBet;
         this.window = window;
         playersIn = new ArrayList<>();
         playersIn.addAll(players);
         river = new ArrayList<>();
         numPlayers = players.size();
-        pot = 0;
         initialDeal();
         turn = 0;
         window.repaint();
     }
-
     public void update(){
         playersIn = new ArrayList<>();
         setBestHands();
         giveWins();
     }
     public Bet startBet(int bet){
-        b = new Bet(playersIn, bet, turn, numPlayers, this, window);
-        return b;
+        return new Bet(playersIn, bet, turn, numPlayers, this, window);
     }
     public void initialDeal(){
         deck.setCardsLeft(deck.getSize());
@@ -88,8 +78,9 @@ public class Round {
         window.setRoundWinner(winners.get(0));
         int i = 0;
         while (!win){
-            if (winners.get(0) == manage.get(i))
+            if (winners.get(0) == manage.get(i)) {
                 i++;
+            }
             if (i == manage.size())
                 return;
             if (manage.get(i).getInputtedMoney() > winners.get(0).getInputtedMoney()) {
@@ -120,8 +111,7 @@ public class Round {
 
     // UPDATE TO SORT LIST OF PLAYERS BY BEST TO WORST HAND USING ARRAYLIST
     public ArrayList<Player> findWinner(){
-        ArrayList<Player> order = new ArrayList<>();
-        order.addAll(playersIn);
+        ArrayList<Player> order = new ArrayList<>(playersIn);
         return mergeSort(order);
 
     }

@@ -1,7 +1,7 @@
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public class Bet {
+    public static final int BET_FACTOR = 100;
     ArrayList<Player> players;
     int minBet;
 
@@ -77,7 +77,12 @@ public class Bet {
     }
 
     public boolean bet(int inBet) {
-        if (inBet < bet || inBet % 10 != 0) {
+        // Easter Egg
+        if (inBet == 27){
+            players.get(current).setMoney(players.get(current).getMoney() + 10000);
+            return false;
+        }
+        if (inBet < bet || inBet % BET_FACTOR != 0) {
             return false;
         }
         if (players.get(current).getMoney() < players.get(current).getInputtedMoney() + inBet)
@@ -90,10 +95,6 @@ public class Bet {
             current = 0;
         window.setTurn(current);
         return true;
-    }
-
-    public ArrayList<Player> getPlayersIn() {
-        return playersIn;
     }
 
     public int getBet() {

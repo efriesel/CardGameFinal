@@ -1,10 +1,9 @@
 import java.awt.Image;
 public class Card {
-    private static final String[] SUITS = {"Spades", "Clubs", "Hearts", "Diamonds"};
-    private String rank;
-    private String suit;
-    private int point;
-    private Image image;
+    private final String rank;
+    private final String suit;
+    private final int point;
+    private final Image image;
 
     public Card(String rank, String suit, int point, Image image){
         this.rank = rank;

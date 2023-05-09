@@ -1,31 +1,21 @@
-import javax.swing.text.AbstractDocument;
-import java.nio.file.AccessDeniedException;
-import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.awt.Graphics;
 
 public class Player {
-    private String name;
+    private final String name;
     private int bestPoints;
     private Deck hand;
-    private Deck currentHand;
     private Deck bestHand;
     private int money;
     private int inputtedMoney;
     private int currentInputtedMoney;
     private boolean elim;
-
-
     public Player(String name, int money) {
         this.name = name;
         this.money = money;
         elim = false;
         hand = new Deck();
         bestPoints = 0;
-    }
-    public Player(String name, ArrayList<Card> deck){
-        this.name = name;
-        hand = new Deck(deck);
     }
 
     public void getBestHand(ArrayList<Card> river) {
@@ -35,7 +25,7 @@ public class Player {
         for (int i = 0; i < river.size() - 2; i++) {
             for (int j = i + 1; j < river.size() - 1; j++) {
                 for (int k = j + 1; k < river.size(); k++) {
-                    currentHand = new Deck();
+                    Deck currentHand = new Deck();
                     currentHand.add(hand.getCards().get(0));
                     currentHand.add(hand.getCards().get(1));
                     currentHand.add(river.get(i));
@@ -45,8 +35,7 @@ public class Player {
                     if (bestPoints < points) {
                         bestPoints = points;
                         bestHand = new Deck();
-                        ArrayList<Card> c = new ArrayList<>();
-                        c.addAll(currentHand.getCards());
+                        ArrayList<Card> c = new ArrayList<>(currentHand.getCards());
                         bestHand.setCards(c);
                         bestHand.setName(currentHand.getName());
                     }

@@ -1,22 +1,15 @@
-import java.util.Scanner;
 import java.util.ArrayList;
 public class Game {
-    public static final int INITIAL_MONEY = 1000;
-
-    public static final int INITIAL_BET = 50;
-
-    private static final int BET_INCREASE_AMOUNT = 50;
-    // ADD EXTRA FOR THE BURN PILE;
+    public static final int INITIAL_MONEY = 10000;
+    public static final int INITIAL_BET = 1000;
+    private static final int BET_INCREASE_AMOUNT = INITIAL_BET / 2;
     public static final int RIVER_STACKS = 5;
     private final GameViewer window;
-    int bet;
+    private int bet;
     private int playerCount;
     private Deck deck;
     private ArrayList<Player> players;
-
-    Round r;
-
-
+    private Round r;
     public static void main(String[] args) {
         new Game();
     }
@@ -34,11 +27,14 @@ public class Game {
     }
 
     public void run() {
-        r = new Round(playerCount, deck, players, bet, window);
+        r = new Round(playerCount, deck, players, window);
     }
 
     public Bet startBet(int bet){
         return r.startBet(bet);
+    }
+    public int getBet(){
+        return bet;
     }
     public ArrayList<Card> riverStart(int river){
         r.river(river);
@@ -49,8 +45,8 @@ public class Game {
     }
     public void update(){
         r.update();
+        bet += BET_INCREASE_AMOUNT;
     }
-
     public void setPlayers(ArrayList<Player> players){
         this.players = players;
         playerCount = players.size();

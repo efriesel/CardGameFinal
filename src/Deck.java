@@ -35,12 +35,12 @@ public class Deck {
     private static final ArrayList<String> RANK_ORDER = new ArrayList<>(Arrays.asList("2", "3", "4","5","6","7","8","9",
                                                                                 "10","Jack", "Queen", "King", "Ace"));
     public Deck(String[] rank, String[] suits, int[] point){
-        cards = new ArrayList<Card>();
+        cards = new ArrayList<>();
         cardsLeft = rank.length * suits.length;
         int imageOrder = 0;
         for (int i = 0; i < rank.length; i++) {
-            for (int j = 0; j < suits.length; j++) {
-                Card c = new Card(rank[i], suits[j], point[i], new ImageIcon("Resources/Cards/" + Integer.toString(imageOrder) + ".png").getImage());
+            for (String suit : suits) {
+                Card c = new Card(rank[i], suit, point[i], new ImageIcon("Resources/Cards/" + imageOrder + ".png").getImage());
                 imageOrder++;
                 cards.add(c);
             }
@@ -48,13 +48,9 @@ public class Deck {
         name = "";
 
     }
-    public Deck(ArrayList<Card> c){
-        cards = new ArrayList<Card>();
-        for (int i = 0; i < c.size(); i++)
-            cards.add(c.get(i));
-    }
+
     public Deck(){
-        cards = new ArrayList<Card>();
+        cards = new ArrayList<>();
     }
     public ArrayList<Card> getCards(){
         return cards;
@@ -71,12 +67,7 @@ public class Deck {
     public void setCards(ArrayList<Card> cards) {
         this.cards = cards;
     }
-    public boolean isEmpty(){
-        return cardsLeft == 0;
-    }
-    public int getCardsLeft() {
-        return cardsLeft;
-    }
+
     public Card deal() {
         if (cards.isEmpty())
             return null;
@@ -208,7 +199,6 @@ public class Deck {
                      if (hasThreePair) {
                          hasFullHouse = true;
                          pairs[current] = RANK_ORDER.indexOf(cards.get(i).getRank());
-                         return pairs;
                      }
                      else {
                          if (pairs[0] < RANK_ORDER.indexOf(cards.get(i).getRank())) {
@@ -217,8 +207,8 @@ public class Deck {
                              pairs[1] = swap;
                          }
                          hasTwoPair = true;
-                         return pairs;
                      }
+                     return pairs;
                  }
                  else {
                      pairs[0] = RANK_ORDER.indexOf(cards.get(i).getRank());

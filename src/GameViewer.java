@@ -188,7 +188,6 @@ public class GameViewer extends JFrame implements ActionListener {
         if (state == WELCOME_SCREEN) {
             String s = e.getActionCommand();
             if (s != null && s.equals("Submit")) {
-                System.out.println("works");
                 state++;
                 add(field);
                 repaint();
@@ -212,14 +211,17 @@ public class GameViewer extends JFrame implements ActionListener {
         else if (state == NAME_COLLECTION) {
             String current = field.getText();
             if (current != null) {
-                players.add(new Player(current, Game.INITIAL_MONEY));
+                // Easter Egg
+                if (current.equals("Ethan") || current.equals("Will"))
+                    players.add(new Player(current, 100000));
+                else
+                    players.add(new Player(current, Game.INITIAL_MONEY));
                 count++;
                 repaint();
             }
             if (count == playerCount){
                 state++;
                 remove(field);
-                System.out.println("works");
                 count = 0;
                 game.setPlayers(players);
                 game.setDeck();
@@ -230,7 +232,6 @@ public class GameViewer extends JFrame implements ActionListener {
         else if (state == PRE_DEAL){
             String s = e.getActionCommand();
             if (s != null && s.equals("Submit")) {
-                System.out.println("works");
                 if (roundWinner){
                     game.setPlayersInGame();
                     game.run();
@@ -238,7 +239,7 @@ public class GameViewer extends JFrame implements ActionListener {
                 state++;
                 remove(submit);
                 show = false;
-                b = game.startBet(Game.INITIAL_BET);
+                b = game.startBet(game.getBet());
                 repaint();
             }
         }
@@ -301,6 +302,8 @@ public class GameViewer extends JFrame implements ActionListener {
             }
             else if (s.equals("Cancel")){
                 state = BET_PLAY;
+                submit.setBounds(submit.getX() - submit.getWidth() / 2, submit.getY(), submit.getWidth(),
+                        submit.getHeight());
                 remove(submit);
                 remove(cancel);
                 remove(field);
@@ -451,11 +454,14 @@ public class GameViewer extends JFrame implements ActionListener {
     }
     public void getInput(Graphics g){
         g.setColor(Color.LIGHT_GRAY);
-        g.fillRect(WINDOW_WIDTH / 4, Y_HEIGHT / 4 + HEADER_HEIGHT, WINDOW_WIDTH / 2, Y_HEIGHT / 2);
+        g.fillRect(WINDOW_WIDTH / 4, Y_HEIGHT / 4 + HEADER_HEIGHT + SMALL_FONT.getSize(), WINDOW_WIDTH / 2,
+                Y_HEIGHT / 2);
         g.setFont(SMALL_FONT);
         g.setColor(Color.BLACK);
-        g.drawString("Submit When Ready", WINDOW_WIDTH / 4,
-                Y_HEIGHT / 4 + HEADER_HEIGHT + SMALL_FONT.getSize());
+        g.drawString("Submit When Ready, a bet that is higher", WINDOW_WIDTH / 4,
+                Y_HEIGHT / 4 + HEADER_HEIGHT + SMALL_FONT.getSize() * 2);
+        g.drawString("and a multiple of " + Bet.BET_FACTOR, WINDOW_WIDTH / 4,
+                Y_HEIGHT / 4 + HEADER_HEIGHT + SMALL_FONT.getSize() * 3);
         add(field);
         g.drawImage(field_image, field.getX(), field.getY() + field.getHeight() / 2, field.getWidth(),
                 field.getHeight(), this);
@@ -473,7 +479,7 @@ public class GameViewer extends JFrame implements ActionListener {
         g.setFont(SMALL_FONT);
         g.setColor(Color.BLACK);
         String name = winner.getName() + " Wins";
-        g.drawString(name, WINDOW_WIDTH / 2 - SMALL_FONT.getSize() * name.length(), Y_HEIGHT / 2);
+        g.drawString(name, WINDOW_WIDTH / 2 - (SMALL_FONT.getSize() * name.length()) / 2, Y_HEIGHT / 2);
     }
     public void win(Player p){
         winner = p;
