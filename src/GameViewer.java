@@ -2,12 +2,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.image.BufferStrategy;
 import java.util.ArrayList;
 
 public class GameViewer extends JFrame implements ActionListener {
+    // Constants for window drawing, spacing, etc
     private static final int MAX_PLAYERS = 4;
     public static final Font SMALL_FONT = new Font("Sans-Serif", 1, 20);
     private static final int HEADER_HEIGHT = 22;
@@ -22,9 +20,11 @@ public class GameViewer extends JFrame implements ActionListener {
     private final int RIVER_START = WINDOW_WIDTH / 10;
     private final int GAP_BEFORE_EDGE = 20;
     private final int CARD_SPACING = 20;
+    // Overall card images
     private final Image BACKGROUND_IMAGE = new ImageIcon("Resources/Background.jpeg").getImage();
     private final Image BACK_OF_CARD_FRONT = new ImageIcon("Resources/Back.png").getImage();
     private final Image BACK_OF_CARD_SIDE = new ImageIcon("Resources/BackSide.png").getImage();
+    // stages of gameplay
     public final int WELCOME_SCREEN = 0;
     public final int NUMBER_OF_PLAYER_COLLECTION = 1;
     public final int NAME_COLLECTION = 2;
@@ -32,14 +32,21 @@ public class GameViewer extends JFrame implements ActionListener {
     public final int BET_PLAY = 4;
     public final int INPUT_BET = 5;
     public final int WIN = 6;
+    // private instance variable game
     private final Game game;
+    // the variable b for Bet (to change each round)
     private Bet b;
+    // the variable to change the state of the game
     private int state;
+    // the players
     private final ArrayList<Player> players;
-    private ArrayList<Player> playersIn;
+    // the number of players
     private int playerCount;
+    // the river (to change each round
     private ArrayList<Card> river;
+    // the current turn
     private int turn;
+    // Button declaration and overlay image declaration
     private final JButton submit = new JButton("Submit");
     private final Image submit_image = new ImageIcon("Resources/Submit.png").getImage();
     private final JButton cancel = new JButton("Cancel");
@@ -54,15 +61,22 @@ public class GameViewer extends JFrame implements ActionListener {
     private final Image fold_image = new ImageIcon("Resources/Fold.png").getImage();
     private final JButton allIn = new JButton("All In");
     private final Image allIn_image = new ImageIcon("Resources/All In.png").getImage();
+    // initialize the text field and overlay image
     private final JTextField field = new JTextField();
     private final Image field_image = new ImageIcon("Resources/Field.png").getImage();
+    // the count variable which will count how many players are inputted and how many bets are played in a round
     private int count;
+    // if the cards for the player whose turn it is shows their cards
     private boolean show;
+    // if there is a winner of the round (So win statement can show in the PRE_DEAL state
     private boolean roundWinner;
-    Player winner;
+    // The player who won
+    private Player winner;
+    // the total pot (for visuals only)
     private int pot;
 
     public GameViewer (Game game) {
+        // initialize the game and players
         this.game = game;
         players = new ArrayList<>();
         //default operations with name "Poker"
@@ -71,16 +85,23 @@ public class GameViewer extends JFrame implements ActionListener {
         setTitle("Poker");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(null);
+        // set the bounds for the submit button, with cancel to the left of half of it
         submit.setBounds(WINDOW_WIDTH / 2 - BUTTON_WIDTH / 2, Y_HEIGHT / 4 * 3 + HEADER_HEIGHT - BUTTON_HEIGHT * 2
                 - BUTTON_HEIGHT / 2, BUTTON_WIDTH, BUTTON_HEIGHT);
         Rectangle r = submit.getBounds();
         r.x = r.x - BUTTON_WIDTH / 2;
         cancel.setBounds(r);
+        // set the bounds of the bet, call, reveal, fold, and allIn buttons to five across the bottom with equal spacing
         bet.setBounds(0, WINDOW_HEIGHT - BUTTON_HEIGHT - 100, BUTTON_WIDTH, BUTTON_HEIGHT);
-        call.setBounds(BUTTON_WIDTH + BUTTON_SPACING, WINDOW_HEIGHT - BUTTON_HEIGHT - 100, BUTTON_WIDTH, BUTTON_HEIGHT);
-        reveal.setBounds(2 * (BUTTON_WIDTH + BUTTON_SPACING), WINDOW_HEIGHT - BUTTON_HEIGHT - 100, BUTTON_WIDTH, BUTTON_HEIGHT);
-        fold.setBounds(3 * (BUTTON_WIDTH + BUTTON_SPACING), WINDOW_HEIGHT - BUTTON_HEIGHT - 100, BUTTON_WIDTH, BUTTON_HEIGHT);
-        allIn.setBounds(4 * (BUTTON_WIDTH + BUTTON_SPACING), WINDOW_HEIGHT - BUTTON_HEIGHT - 100, BUTTON_WIDTH, BUTTON_HEIGHT);
+        call.setBounds(BUTTON_WIDTH + BUTTON_SPACING, WINDOW_HEIGHT - BUTTON_HEIGHT - 100, BUTTON_WIDTH,
+                BUTTON_HEIGHT);
+        reveal.setBounds(2 * (BUTTON_WIDTH + BUTTON_SPACING), WINDOW_HEIGHT - BUTTON_HEIGHT - 100, BUTTON_WIDTH,
+                BUTTON_HEIGHT);
+        fold.setBounds(3 * (BUTTON_WIDTH + BUTTON_SPACING), WINDOW_HEIGHT - BUTTON_HEIGHT - 100, BUTTON_WIDTH,
+                BUTTON_HEIGHT);
+        allIn.setBounds(4 * (BUTTON_WIDTH + BUTTON_SPACING), WINDOW_HEIGHT - BUTTON_HEIGHT - 100, BUTTON_WIDTH,
+                BUTTON_HEIGHT);
+        // add the action listeners for all buttons
         submit.addActionListener(this);
         cancel.addActionListener(this);
         bet.addActionListener(this);
@@ -89,16 +110,25 @@ public class GameViewer extends JFrame implements ActionListener {
         fold.addActionListener(this);
         allIn.addActionListener(this);
         this.validate();
+        // set the bounds of the text field
         field.setBounds(WINDOW_WIDTH / 4, Y_HEIGHT / 11 * 5 + HEADER_HEIGHT, WINDOW_WIDTH / 2,
                 Y_HEIGHT / 11);
+        // initialize the turn as -1 and roundWinner to false for first few states of the game
         turn = -1;
         roundWinner = false;
+        // set LocationRelativeTo to null so I have control
         this.setLocationRelativeTo(null);
+        // setVisible to true
         setVisible(true);
     }
 
+    /**
+     * This paint method will paint the background and foreground that depends on state of game
+     * @param g the specified Graphics window
+     */
     public void paint(Graphics g)
     {
+        // the Background will always be painted
         printBackground(g);
         if (state == WELCOME_SCREEN) {
             printInstructions(g);
@@ -215,17 +245,20 @@ public class GameViewer extends JFrame implements ActionListener {
         else if (state == BET_PLAY){
             String s = e.getActionCommand();
             if (s.equals("Bet")){
-                state = INPUT_BET;
-                Rectangle alter = submit.getBounds();
-                alter.x = alter.x + alter.width / 2;
-                submit.setBounds(alter);
+                if (!players.get(turn).isElim()) {
+                    state = INPUT_BET;
+                    Rectangle alter = submit.getBounds();
+                    alter.x = alter.x + alter.width / 2;
+                    submit.setBounds(alter);
+                    show = false;
+                }
             }
             else if (s.equals("Reveal")){
-                show = !show;
+                if (!players.get(turn).isElim())
+                    show = !show;
             }
             else{
                 if (b.bet(s)) {
-                    playersIn = b.getPlayersIn();
                     if (count == 3) {
                         game.update();
                         state = PRE_DEAL;
@@ -378,8 +411,12 @@ public class GameViewer extends JFrame implements ActionListener {
     public void printTurn(Graphics g){
         g.setColor(Color.WHITE);
         g.setFont(SMALL_FONT);
-        String name = "Player : " + players.get(turn).getName() + " Money: $" + (players.get(turn).getMoney() -
-                players.get(turn).getInputtedMoney() - players.get(turn).getCurrentInputtedMoney());
+        String name = "Player : " + players.get(turn).getName();
+        if (players.get(turn).isElim())
+            name += " HAS FOLDED, CALL TO CONTINUE";
+        else
+            name += " Money: $" + (players.get(turn).getMoney() - players.get(turn).getInputtedMoney() -
+                    players.get(turn).getCurrentInputtedMoney());
         g.drawString(name, WINDOW_WIDTH / 2 - (SMALL_FONT.getSize() * name.length()) / 4,
                 Y_HEIGHT / 5 * 4 + HEADER_HEIGHT);
         if (show){

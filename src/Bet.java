@@ -6,13 +6,14 @@ public class Bet {
     int minBet;
 
     ArrayList<Player> playersIn;
-
+    Round r;
     GameViewer window;
     int bet;
     int calls;
     int current;
+    int numPlayers;
 
-    public Bet(ArrayList<Player> players, int minBet, int turn, GameViewer window) {
+    public Bet(ArrayList<Player> players, int minBet, int turn, int numPlayers, Round r, GameViewer window) {
         this.players = players;
         this.minBet = minBet;
         this.window = window;
@@ -22,10 +23,17 @@ public class Bet {
         current = turn;
         window.setTurn(current);
         bet = minBet;
+        this.r = r;
+        this.numPlayers = numPlayers;
     }
 
     public boolean bet(String in) {
         if (in.equals("Call")) {
+            if (!playersIn.contains(players.get(current)) && !players.get(current).isElim()) {
+                current++;
+                window.setTurn(current);
+                return false;
+            }
             if (players.get(current).getMoney() < players.get(current).getInputtedMoney() + bet)
                 return false;
             players.get(current).setCurrentInputtedMoney(bet);
@@ -33,6 +41,7 @@ public class Bet {
         } else if (in.equals("Fold")) {
             playersIn.get(current).setElim(true);
             playersIn.remove(current);
+            numPlayers--;
         } else {
             if (players.get(current).getMoney() - players.get(current).getInputtedMoney() > bet)
                 bet = players.get(current).getMoney() - players.get(current).getInputtedMoney();
@@ -41,21 +50,27 @@ public class Bet {
             players.get(current).setInputtedMoney(players.get(current).getMoney());
         }
         current++;
+        if (numPlayers == 1){
+            return true;
+        }
         if (current == playersIn.size())
             current = 0;
         if (playersIn.size() <= 1) {
             setInputtedBet();
+            r.setNumPlayers(numPlayers);
             return true;
         }
         if (playersIn.get(current).getMoney() == playersIn.get(current).getInputtedMoney() + players.get(current).getCurrentInputtedMoney())
             playersIn.remove(current);
         if (playersIn.size() <= 1) {
             setInputtedBet();
+            r.setNumPlayers(numPlayers);
             return true;
         }
         window.setTurn(current);
         if (calls == playersIn.size()) {
             setInputtedBet();
+            r.setNumPlayers(numPlayers);
             return true;
         }
         return false;

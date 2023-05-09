@@ -3,7 +3,7 @@ import java.util.ArrayList;
 
 public class Round {
 
-    private int playerCount;
+    private final int playerCount;
 
     private Deck deck;
 
@@ -11,6 +11,7 @@ public class Round {
 
     private ArrayList<Player> players;
     private ArrayList<Player> playersIn;
+    private int numPlayers;
     private GameViewer window;
 
     private int minBet;
@@ -30,6 +31,7 @@ public class Round {
         playersIn = new ArrayList<>();
         playersIn.addAll(players);
         river = new ArrayList<>();
+        numPlayers = players.size();
         pot = 0;
         initialDeal();
         turn = 0;
@@ -42,7 +44,7 @@ public class Round {
         giveWins();
     }
     public Bet startBet(int bet){
-        b = new Bet(playersIn, bet, turn, window);
+        b = new Bet(playersIn, bet, turn, numPlayers, this, window);
         return b;
     }
     public void initialDeal(){
@@ -180,8 +182,7 @@ public class Round {
         return order;
     }
 
-
-
-
-
+    public void setNumPlayers(int numPlayers) {
+        this.numPlayers = numPlayers;
+    }
 }
