@@ -34,24 +34,28 @@ public class Bet {
 
     public boolean bet(String in) {
         if (in.equals("Call")) {
-            if (!playersIn.contains(players.get(current)) && !players.get(current).isElim()) {
-                current++;
-                window.setTurn(current);
-                return false;
+            if (players.get(current).getMoney() == bet){
+                playersIn.remove(players.get(current));
+                players.get(current).setInputtedMoney(players.get(current).getMoney());
+                players.get(current).setCurrentInputtedMoney(0);
             }
             if (players.get(current).getMoney() < players.get(current).getInputtedMoney() + bet)
                 return false;
             players.get(current).setCurrentInputtedMoney(bet);
             calls++;
         } else if (in.equals("Fold")) {
-            playersIn.get(current).setElim(true);
-            playersIn.remove(current);
+            players.get(current).setElim(true);
+            playersIn.remove(players.get(current));
             numPlayers--;
         } else {
-            if (players.get(current).getMoney() - players.get(current).getInputtedMoney() > bet)
+            if (players.get(current).getMoney() - players.get(current).getInputtedMoney() > bet) {
                 bet = players.get(current).getMoney() - players.get(current).getInputtedMoney();
-            else
+                calls = 1;
+            }
+            else {
                 playersIn.remove(players.get(current));
+                calls++;
+            }
             players.get(current).setInputtedMoney(players.get(current).getMoney());
             players.get(current).setCurrentInputtedMoney(0);
         }
@@ -59,22 +63,12 @@ public class Bet {
         if (numPlayers == 1){
             return true;
         }
-        if (current == numPlayers)
+        if (current == players.size())
             current = 0;
-        if (playersIn.size() <= 1) {
-            setInputtedBet();
-            r.setNumPlayers(numPlayers);
-            return true;
-        }
         if (players.get(current).getMoney() == players.get(current).getInputtedMoney() + players.get(current).getCurrentInputtedMoney())
             playersIn.remove(players.get(current));
-        if (playersIn.size() <= 1) {
-            setInputtedBet();
-            r.setNumPlayers(numPlayers);
-            return true;
-        }
         window.setTurn(current);
-        if (calls == playersIn.size()) {
+        if (calls == numPlayers) {
             setInputtedBet();
             r.setNumPlayers(numPlayers);
             return true;
@@ -84,6 +78,9 @@ public class Bet {
 
     public boolean bet(int inBet) {
         // Easter Egg
+        if (inBet == 17){
+            players.get(current).setCODE_17(true);
+        }
         if (inBet == 27){
             players.get(current).setMoney(players.get(current).getMoney() + 10000);
             return false;
@@ -97,7 +94,7 @@ public class Bet {
         players.get(current).setCurrentInputtedMoney(bet);
         calls = 1;
         current++;
-        if (current == playersIn.size())
+        if (current >= playersIn.size())
             current = 0;
         window.setTurn(current);
         return true;

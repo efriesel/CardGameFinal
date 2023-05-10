@@ -55,6 +55,7 @@ public class Game {
     public void setPlayersInGame(){
         int i = 0;
         while (i < playerCount) {
+            players.get(i).setCODE_17(false);
             if (players.get(i).getMoney() == 0){
                 players.remove(i);
                 playerCount--;

@@ -42,7 +42,7 @@ public class GameViewer extends JFrame implements ActionListener {
     private final ArrayList<Player> players;
     // the number of players
     private int playerCount;
-    // the river (to change each round
+    // the river (to change each round)
     private ArrayList<Card> river;
     // the current turn
     private int turn;
@@ -145,6 +145,11 @@ public class GameViewer extends JFrame implements ActionListener {
             add(field);
         }
         else if (state == PRE_DEAL){
+            remove(bet);
+            remove(call);
+            remove(reveal);
+            remove(fold);
+            remove(allIn);
             printOutlines(g);
             askForReady(g);
             if (roundWinner){
@@ -265,6 +270,8 @@ public class GameViewer extends JFrame implements ActionListener {
                         state = PRE_DEAL;
                         count = 0;
                         roundWinner = true;
+                        if (turn >= players.size())
+                            turn = 0;
                         repaint();
                         pot = 0;
                     }
@@ -412,28 +419,31 @@ public class GameViewer extends JFrame implements ActionListener {
                     HEADER_HEIGHT + GAP_BEFORE_EDGE + HEADER_HEIGHT, CARD_WIDTH, CARD_HEIGHT, this);
         }
     }
-    public void printTurn(Graphics g){
+    public void printTurn(Graphics g) {
         g.setColor(Color.WHITE);
         g.setFont(SMALL_FONT);
         String name = "Player : " + players.get(turn).getName();
-        if (players.get(turn).isElim())
+        if (players.get(turn).getInputtedMoney() == players.get(turn).getMoney())
+            name += " Is All In, press ALL IN TO CONTINUE";
+        else if (players.get(turn).isElim())
             name += " HAS FOLDED, CALL TO CONTINUE";
         else
             name += " Money: $" + (players.get(turn).getMoney() - players.get(turn).getInputtedMoney() -
                     players.get(turn).getCurrentInputtedMoney());
         g.drawString(name, WINDOW_WIDTH / 2 - (SMALL_FONT.getSize() * name.length()) / 4,
                 Y_HEIGHT / 5 * 4 + HEADER_HEIGHT);
-        if (show){
-            g.drawImage(players.get(turn).getHand().getCards().get(0).getImage(), WINDOW_WIDTH / 2 - CARD_WIDTH,
-                    Y_HEIGHT / 2 + HEADER_HEIGHT, CARD_WIDTH, CARD_HEIGHT, this);
-            g.drawImage(players.get(turn).getHand().getCards().get(1).getImage(), WINDOW_WIDTH / 2,
-                    Y_HEIGHT / 2 + HEADER_HEIGHT, CARD_WIDTH, CARD_HEIGHT, this);
-        }
-        else {
-            g.drawImage(BACK_OF_CARD_FRONT, WINDOW_WIDTH / 2 - CARD_WIDTH, Y_HEIGHT / 2 + HEADER_HEIGHT,
-                    CARD_WIDTH, CARD_HEIGHT, this);
-            g.drawImage(BACK_OF_CARD_FRONT, WINDOW_WIDTH / 2, Y_HEIGHT / 2 + HEADER_HEIGHT, CARD_WIDTH,
-                    CARD_HEIGHT, this);
+        if (!players.get(turn).isElim()){
+            if (show) {
+                g.drawImage(players.get(turn).getHand().getCards().get(0).getImage(), WINDOW_WIDTH / 2 - CARD_WIDTH,
+                        Y_HEIGHT / 2 + HEADER_HEIGHT, CARD_WIDTH, CARD_HEIGHT, this);
+                g.drawImage(players.get(turn).getHand().getCards().get(1).getImage(), WINDOW_WIDTH / 2,
+                        Y_HEIGHT / 2 + HEADER_HEIGHT, CARD_WIDTH, CARD_HEIGHT, this);
+            } else {
+                g.drawImage(BACK_OF_CARD_FRONT, WINDOW_WIDTH / 2 - CARD_WIDTH, Y_HEIGHT / 2 + HEADER_HEIGHT,
+                        CARD_WIDTH, CARD_HEIGHT, this);
+                g.drawImage(BACK_OF_CARD_FRONT, WINDOW_WIDTH / 2, Y_HEIGHT / 2 + HEADER_HEIGHT, CARD_WIDTH,
+                        CARD_HEIGHT, this);
+            }
         }
     }
     public void setButtons(Graphics g){

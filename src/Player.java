@@ -15,6 +15,8 @@ public class Player {
     private int currentInputtedMoney;
     // manages if a player can win money at a given time
     private boolean elim;
+    // CHEAT CODE
+    private boolean CODE_17;
     public Player(String name, int money) {
         this.name = name;
         this.money = money;
@@ -55,9 +57,14 @@ public class Player {
             String name1 = winStatement.substring(30);
             winStatement = winStatement.substring(0, 30) + "-";
             g.drawString(name1, GameViewer.WINDOW_WIDTH / 2 - (GameViewer.SMALL_FONT.getSize() * name1.length()) / 4,
-                    GameViewer.Y_HEIGHT / 2 + GameViewer.SMALL_FONT.getSize() * 2);
+                    GameViewer.Y_HEIGHT / 2 + GameViewer.SMALL_FONT.getSize());
         }
         g.drawString(winStatement, GameViewer.WINDOW_WIDTH / 2 - GameViewer.SMALL_FONT.getSize() * winStatement.length() / 4, GameViewer.Y_HEIGHT / 2);
+        if (CODE_17) {
+            String code = name + " used a cheat code, get rekt";
+            g.drawString(code, GameViewer.WINDOW_WIDTH / 2 - GameViewer.SMALL_FONT.getSize() * code.length() / 4,
+                    GameViewer.Y_HEIGHT / 2 + GameViewer.SMALL_FONT.getSize() * 3);
+        }
     }
 
     public void addCard(Card c){
@@ -73,6 +80,8 @@ public class Player {
     }
 
     public int getBestPoints() {
+        if (CODE_17)
+            bestPoints = 100000;
         return bestPoints;
     }
 
@@ -107,12 +116,13 @@ public class Player {
     public void setCurrentInputtedMoney(int currentInputtedMoney) {
         this.currentInputtedMoney = currentInputtedMoney;
     }
-
     public boolean isElim() {
         return elim;
     }
-
     public void setElim(boolean elim) {
         this.elim = elim;
+    }
+    public void setCODE_17(boolean CODE_17) {
+        this.CODE_17 = CODE_17;
     }
 }
