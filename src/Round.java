@@ -120,46 +120,10 @@ public class Round {
 
     }
 
-//    public void giveWins(){
-//        boolean under = false;
-//        boolean win = false;
-//        ArrayList<Player> manage = new ArrayList<>(players);
-//        ArrayList<Player> winners = findWinner();
-//        window.setRoundWinner(winners.get(0));
-//        int i = 0;
-//        while (!win){
-//            if (winners.get(0) == manage.get(i)) {
-//                i++;
-//            }
-//            if (i == manage.size())
-//                return;
-//            if (manage.get(i).getInputtedMoney() > winners.get(0).getInputtedMoney()) {
-//                under = true;
-//                winners.get(0).setMoney(winners.get(0).getMoney() + winners.get(0).getInputtedMoney());
-//                manage.get(i).setMoney(winners.get(i).getMoney() - winners.get(0).getInputtedMoney());
-//                manage.get(i).setInputtedMoney(manage.get(i).getInputtedMoney() - winners.get(0).getInputtedMoney());
-//                i++;
-//            }
-//            else {
-//                winners.get(0).setMoney(winners.get(0).getMoney() + manage.get(i).getInputtedMoney());
-//                manage.get(i).setMoney(manage.get(i).getMoney() - manage.get(i).getInputtedMoney());
-//                winners.remove(manage.get(i));
-//                manage.remove(i);
-//            }
-//            if (i == manage.size()){
-//                if (under){
-//                    winners.remove(0);
-//                    under = false;
-//                    i = 0;
-//                }
-//                else
-//                    win = true;
-//            }
-//        }
-//
-//    }
-
-    // UPDATE TO SORT LIST OF PLAYERS BY BEST TO WORST HAND USING ARRAYLIST
+    /**
+     * Sorts players from best to worst bestHand points
+     * @return an ArrayList of Players
+     */
     public ArrayList<Player> findWinner(){
         ArrayList<Player> order = new ArrayList<>(playersIn);
         return mergeSort(order);
@@ -190,7 +154,7 @@ public class Round {
      * This method will return a single ArrayList of Players consisting of two inputted ArrayLists
      * @param list1 (One inputted list)
      * @param list2 (Another inputted list)
-     * @return (the returned ArrayList will be sorted from least to greatest player points using the compareTo function)
+     * @return (the returned ArrayList will be sorted greatest to least player points using the compareTo function)
      */
     public ArrayList<Player> merge(ArrayList<Player> list1, ArrayList<Player> list2){
         // create a new ArrayList that will house the combined sorted values of both inputted ArrayLists
