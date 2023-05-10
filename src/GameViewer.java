@@ -114,7 +114,7 @@ public class GameViewer extends JFrame implements ActionListener {
         field.setBounds(WINDOW_WIDTH / 4, Y_HEIGHT / 11 * 5 + HEADER_HEIGHT, WINDOW_WIDTH / 2,
                 Y_HEIGHT / 11);
         // initialize the turn as -1 and roundWinner to false for first few states of the game
-        turn = -1;
+        turn = 0;
         roundWinner = false;
         // set LocationRelativeTo to null so I have control
         this.setLocationRelativeTo(null);
@@ -239,7 +239,7 @@ public class GameViewer extends JFrame implements ActionListener {
                 state++;
                 remove(submit);
                 show = false;
-                b = game.startBet(game.getBet());
+                b = game.startBet(game.getBet(), turn);
                 repaint();
             }
         }
@@ -270,12 +270,12 @@ public class GameViewer extends JFrame implements ActionListener {
                     }
                     else if (count == 0) {
                         river = game.riverStart(3);
-                        b = game.startBet(0);
+                        b = game.startBet(0, turn);
                         count++;
                     }
                     else {
                         game.river(1);
-                        b = game.startBet(0);
+                        b = game.startBet(0, turn);
                         count++;
                     }
                 }
@@ -367,9 +367,10 @@ public class GameViewer extends JFrame implements ActionListener {
                 g.drawRect(x, current, CARD_HEIGHT, CARD_WIDTH);
                 if (i < playerCount) {
                     g.drawString(players.get(i).getName(), x, current + CARD_WIDTH * 6 / 5);
-                    g.drawString(String.valueOf(players.get(i).getMoney() - players.get(i).getInputtedMoney() -
-                            players.get(i).getCurrentInputtedMoney()), x, current + CARD_WIDTH * 6 / 5 +
-                            SMALL_FONT.getSize());
+                    if (state != PRE_DEAL)
+                        g.drawString(String.valueOf(players.get(i).getMoney() - players.get(i).getInputtedMoney() -
+                                players.get(i).getCurrentInputtedMoney()), x, current + CARD_WIDTH * 6 / 5 +
+                                SMALL_FONT.getSize());
                 }
             }
         }
@@ -479,6 +480,12 @@ public class GameViewer extends JFrame implements ActionListener {
         g.setFont(SMALL_FONT);
         g.setColor(Color.BLACK);
         String name = winner.getName() + " Wins";
+        if (name.length() > 15){
+            String name1 = name.substring(15);
+            name = name.substring(0, 15) + "-";
+            g.drawString(name1, WINDOW_WIDTH / 2 - (SMALL_FONT.getSize() * name.length()) / 2,
+                    Y_HEIGHT / 2 + SMALL_FONT.getSize());
+        }
         g.drawString(name, WINDOW_WIDTH / 2 - (SMALL_FONT.getSize() * name.length()) / 2, Y_HEIGHT / 2);
     }
     public void win(Player p){

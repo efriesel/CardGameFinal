@@ -14,7 +14,6 @@ public class Round {
     private int numPlayers;
     private final GameViewer window;
 
-    private final int turn;
 
     public Round(int playerCount, Deck deck, ArrayList<Player> players, GameViewer window){
         this.players = players;
@@ -26,16 +25,7 @@ public class Round {
         river = new ArrayList<>();
         numPlayers = players.size();
         initialDeal();
-        turn = 0;
         window.repaint();
-    }
-    public void update(){
-        playersIn = new ArrayList<>();
-        setBestHands();
-        giveWins();
-    }
-    public Bet startBet(int bet){
-        return new Bet(playersIn, bet, turn, numPlayers, this, window);
     }
     public void initialDeal(){
         deck.setCardsLeft(deck.getSize());
@@ -48,28 +38,37 @@ public class Round {
             }
         }
     }
-    public void setBestHands(){
-        for (Player p : players){
-            if (!p.isElim()) {
-                p.getBestHand(river);
-                playersIn.add(p);
-            }
-        }
+    public Bet startBet(int bet, int turn){
+        return new Bet(playersIn, bet, turn, numPlayers, this, window);
     }
-
     public void river(int cards){
         deck.burn();
         for (int i = 0; i < cards; i++){
             river.add(deck.deal());
         }
     }
-
     public ArrayList<Card> getRiver(){
         return river;
     }
-
-
-
+    public void update(){
+        playersIn = new ArrayList<>();
+        setBestHands();
+        giveWins();
+        for (Player p : players){
+            if (p.getInputtedMoney() > 0)
+                p.setMoney(p.getMoney() + p.getInputtedMoney());
+        }
+    }
+    public void setBestHands(){
+        for (Player p : players){
+            if (!p.isElim()) {
+                p.getBestHand(river);
+                p.setMoney(p.getMoney() - p.getInputtedMoney());
+                playersIn.add(p);
+            }
+            p.setElim(false);
+        }
+    }
     public void giveWins(){
         boolean under = false;
         boolean win = false;
@@ -78,26 +77,26 @@ public class Round {
         window.setRoundWinner(winners.get(0));
         int i = 0;
         while (!win){
-            if (winners.get(0) == manage.get(i)) {
+            while (winners.get(0) == manage.get(i) || manage.get(i).isElim()) {
                 i++;
+                if (i == manage.size())
+                    return;
             }
-            if (i == manage.size())
-                return;
             if (manage.get(i).getInputtedMoney() > winners.get(0).getInputtedMoney()) {
                 under = true;
                 winners.get(0).setMoney(winners.get(0).getMoney() + winners.get(0).getInputtedMoney());
-                manage.get(i).setMoney(winners.get(i).getMoney() - winners.get(0).getInputtedMoney());
                 manage.get(i).setInputtedMoney(manage.get(i).getInputtedMoney() - winners.get(0).getInputtedMoney());
                 i++;
             }
             else {
                 winners.get(0).setMoney(winners.get(0).getMoney() + manage.get(i).getInputtedMoney());
-                manage.get(i).setMoney(manage.get(i).getMoney() - manage.get(i).getInputtedMoney());
+                manage.get(i).setInputtedMoney(0);
                 winners.remove(manage.get(i));
                 manage.remove(i);
             }
             if (i == manage.size()){
                 if (under){
+                    winners.get(0).setElim(true);
                     winners.remove(0);
                     under = false;
                     i = 0;
@@ -108,6 +107,45 @@ public class Round {
         }
 
     }
+
+//    public void giveWins(){
+//        boolean under = false;
+//        boolean win = false;
+//        ArrayList<Player> manage = new ArrayList<>(players);
+//        ArrayList<Player> winners = findWinner();
+//        window.setRoundWinner(winners.get(0));
+//        int i = 0;
+//        while (!win){
+//            if (winners.get(0) == manage.get(i)) {
+//                i++;
+//            }
+//            if (i == manage.size())
+//                return;
+//            if (manage.get(i).getInputtedMoney() > winners.get(0).getInputtedMoney()) {
+//                under = true;
+//                winners.get(0).setMoney(winners.get(0).getMoney() + winners.get(0).getInputtedMoney());
+//                manage.get(i).setMoney(winners.get(i).getMoney() - winners.get(0).getInputtedMoney());
+//                manage.get(i).setInputtedMoney(manage.get(i).getInputtedMoney() - winners.get(0).getInputtedMoney());
+//                i++;
+//            }
+//            else {
+//                winners.get(0).setMoney(winners.get(0).getMoney() + manage.get(i).getInputtedMoney());
+//                manage.get(i).setMoney(manage.get(i).getMoney() - manage.get(i).getInputtedMoney());
+//                winners.remove(manage.get(i));
+//                manage.remove(i);
+//            }
+//            if (i == manage.size()){
+//                if (under){
+//                    winners.remove(0);
+//                    under = false;
+//                    i = 0;
+//                }
+//                else
+//                    win = true;
+//            }
+//        }
+//
+//    }
 
     // UPDATE TO SORT LIST OF PLAYERS BY BEST TO WORST HAND USING ARRAYLIST
     public ArrayList<Player> findWinner(){

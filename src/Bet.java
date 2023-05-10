@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 
 public class Bet {
-    public static final int BET_FACTOR = 100;
+    public static final int BET_FACTOR = 50;
     ArrayList<Player> players;
     int minBet;
 
@@ -20,7 +20,12 @@ public class Bet {
         calls = 0;
         playersIn = new ArrayList<>();
         playersIn.addAll(players);
-        current = turn;
+        if (turn > players.size()) {
+            current = 0;
+            window.setTurn(current);
+        }
+        else
+            current = turn;
         window.setTurn(current);
         bet = minBet;
         this.r = r;
@@ -48,6 +53,7 @@ public class Bet {
             else
                 playersIn.remove(current);
             players.get(current).setInputtedMoney(players.get(current).getMoney());
+            players.get(current).setCurrentInputtedMoney(0);
         }
         current++;
         if (numPlayers == 1){

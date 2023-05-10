@@ -88,9 +88,9 @@ public class Deck {
         sort();
         if (hasStraight() && hasFlush()){
             if (cards.get(cards.size() - 1).getPoint() == POINT_ORDER.get(POINT_ORDER.size() - 1))
-                name = "Royal Flush";
+                name = "Royal Flush of " + cards.get(0).getSuit();
             else
-                name = "Straight Flush";
+                name = "Straight Flush of " + cards.get(0).getSuit();
             points = 61928 + RANK_ORDER.indexOf(cards.get(0).getRank());
             return;
         }
@@ -100,30 +100,23 @@ public class Deck {
         int[] pairs = hasPairs();
         if (pairs != null){
             if (hasFourPair){
-                name = "Four Pair";
+                name = "Four Pair of " + RANK_ORDER.get(pairs[0]) + "'s";
                 points = 55447 + pairs[0] * 518 + pointTotal - (POINT_ORDER.get(pairs[0]) * 4);
             }
             else if (hasFullHouse){
-                name = "Full House";
+                name = "Full House of trip " + RANK_ORDER.get(pairs[0]) + "'s and dub " + RANK_ORDER.get(pairs[1]) +
+                        "'s";
                 points = 55265 + pairs[0] * 14 + pairs[1];
             }
-            else if (hasFlush){
-                name = "Flush";
-                points = 55259 + pointTotal;
-            }
-//            else if (hasStraight){
-//                name = "Straight";
-//                points = 55264 + RANK_ORDER.indexOf(cards.get(0).getRank());
-//            }
             else if (hasThreePair){
-                name = "Three Pair";
+                name = "Three Pair of " + RANK_ORDER.get(pairs[0]) + "'s";
                 points = 45610 + pairs[0] * 782 + pointTotal - (POINT_ORDER.get(pairs[0]) * 3);
                 if (pairs[0] > 11)
                     points = points - POINT_ORDER.get(11) + 135;
 
             }
             else if (hasTwoPair){
-                name = "Two Pair";
+                name = "Two Pair of " + RANK_ORDER.get(pairs[0]) + "'s and " + RANK_ORDER.get(pairs[1]) + "'s";
                 int multiplier = 0;
                 for (int i = 0; i < pairs[0] - 1; i++){
                     multiplier += (pairs[0] - 1 - i);
@@ -132,7 +125,7 @@ public class Deck {
                 points = 11422 + multiplier * 518;
             }
             else {
-                name = "Pair";
+                name = "Pair of " + RANK_ORDER.get(pairs[0]) + "'s";
                 points = 1001 + pairs[0] * 911 + pointTotal - POINT_ORDER.get(pairs[0]) * 2;
                 if (pairs[0] > 10)
                     points = points - POINT_ORDER.get(pairs[0]) + 70;
@@ -140,7 +133,7 @@ public class Deck {
             }
         }
         else if (hasFlush){
-            name = "Flush";
+            name = "Flush of " + cards.get(0).getSuit();
             points = 55259 + pointTotal;
         }
         else if (hasStraight){
@@ -174,7 +167,7 @@ public class Deck {
         for (int i = 0; i < cards.size() - 1; i++){
             int value = cards.get(i).getPoint();
             if (i < cards.size() - 3 && value == cards.get(i + 1).getPoint() && value == cards.get(i + 2).getPoint() &&
-                                                                                value == cards.get(i + 3).getPoint()){
+                    value == cards.get(i + 3).getPoint()){
                 hasFourPair = true;
                 pairs[current] = RANK_ORDER.indexOf(cards.get(i).getRank());
                 return pairs;
@@ -227,7 +220,7 @@ public class Deck {
     public boolean hasFlush(){
         String s = cards.get(0).getSuit();
         if (s.equals(cards.get(1).getSuit()) && s.equals(cards.get(2).getSuit()) && s.equals(cards.get(3).getSuit()) &&
-                                                                                    s.equals(cards.get(4).getSuit())) {
+                s.equals(cards.get(4).getSuit())) {
             hasFlush = true;
             return true;
         }

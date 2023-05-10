@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 public class Game {
-    public static final int INITIAL_MONEY = 10000;
-    public static final int INITIAL_BET = 1000;
+    public static final int INITIAL_MONEY = 1000;
+    public static final int INITIAL_BET = 100;
     private static final int BET_INCREASE_AMOUNT = INITIAL_BET / 2;
     public static final int RIVER_STACKS = 5;
     private final GameViewer window;
@@ -30,8 +30,8 @@ public class Game {
         r = new Round(playerCount, deck, players, window);
     }
 
-    public Bet startBet(int bet){
-        return r.startBet(bet);
+    public Bet startBet(int bet, int turn){
+        return r.startBet(bet, turn);
     }
     public int getBet(){
         return bet;

@@ -6,9 +6,13 @@ public class Player {
     private int bestPoints;
     private Deck hand;
     private Deck bestHand;
+    // the amount of money a player has
     private int money;
+    // manages the total amount of money inputted in a round
     private int inputtedMoney;
+    // manages the amount of money inputted in a given betting sequence
     private int currentInputtedMoney;
+    // manages if a player can win money at a given time
     private boolean elim;
     public Player(String name, int money) {
         this.name = name;
@@ -46,6 +50,12 @@ public class Player {
     public void printWin(Graphics g){
         g.setFont(GameViewer.SMALL_FONT);
         String winStatement = name + " has the Best Hand with a " + bestHand.getName();
+        if (winStatement.length() > 30){
+            String name1 = winStatement.substring(30);
+            winStatement = winStatement.substring(0, 30) + "-";
+            g.drawString(name1, GameViewer.WINDOW_WIDTH / 2 - (GameViewer.SMALL_FONT.getSize() * name1.length()) / 4,
+                    GameViewer.Y_HEIGHT / 2 + GameViewer.SMALL_FONT.getSize() * 2);
+        }
         g.drawString(winStatement, GameViewer.WINDOW_WIDTH / 2 - GameViewer.SMALL_FONT.getSize() * winStatement.length() / 4, GameViewer.Y_HEIGHT / 2);
     }
 
