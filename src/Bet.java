@@ -51,7 +51,7 @@ public class Bet {
             if (players.get(current).getMoney() - players.get(current).getInputtedMoney() > bet)
                 bet = players.get(current).getMoney() - players.get(current).getInputtedMoney();
             else
-                playersIn.remove(current);
+                playersIn.remove(players.get(current));
             players.get(current).setInputtedMoney(players.get(current).getMoney());
             players.get(current).setCurrentInputtedMoney(0);
         }
@@ -66,8 +66,8 @@ public class Bet {
             r.setNumPlayers(numPlayers);
             return true;
         }
-        if (playersIn.get(current).getMoney() == playersIn.get(current).getInputtedMoney() + players.get(current).getCurrentInputtedMoney())
-            playersIn.remove(current);
+        if (players.get(current).getMoney() == players.get(current).getInputtedMoney() + players.get(current).getCurrentInputtedMoney())
+            playersIn.remove(players.get(current));
         if (playersIn.size() <= 1) {
             setInputtedBet();
             r.setNumPlayers(numPlayers);
