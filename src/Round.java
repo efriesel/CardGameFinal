@@ -63,9 +63,9 @@ public class Round {
         for (Player p : players){
             if (!p.isElim()) {
                 p.getBestHand(river);
-                p.setMoney(p.getMoney() - p.getInputtedMoney());
                 playersIn.add(p);
             }
+            p.setMoney(p.getMoney() - p.getInputtedMoney());
             p.setElim(false);
         }
     }

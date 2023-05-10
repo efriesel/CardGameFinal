@@ -2,6 +2,7 @@ import java.util.ArrayList;
 import java.awt.Graphics;
 
 public class Player {
+    // Instance variables
     private final String name;
     private int bestPoints;
     private Deck hand;
