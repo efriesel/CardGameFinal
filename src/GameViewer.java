@@ -349,7 +349,7 @@ public class GameViewer extends JFrame implements ActionListener {
                 HEADER_HEIGHT, CARD_WIDTH, CARD_HEIGHT);
         for (int i = 0; i < Game.RIVER_STACKS; i++){
             g.drawRect(RIVER_START + (CARD_WIDTH * (i + 1)) + CARD_SPACING, HEADER_HEIGHT + GAP_BEFORE_EDGE +
-                            HEADER_HEIGHT, CARD_WIDTH, CARD_HEIGHT);
+                    HEADER_HEIGHT, CARD_WIDTH, CARD_HEIGHT);
         }
         g.setFont(SMALL_FONT);
         int start = GAP_BEFORE_EDGE + CARD_WIDTH + HEADER_HEIGHT;

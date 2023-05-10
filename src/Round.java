@@ -59,6 +59,14 @@ public class Round {
                 p.setMoney(p.getMoney() + p.getInputtedMoney());
         }
     }
+
+    /**
+     * This function will set the best hands of every player that can earn money this round
+     * They will be added to playersIn so the hands can be ranked using merge sort
+     * money will be taken away based on how much money was inputted
+     * elim will be set to false for all players, as players who have won all they can win cannot affect other players
+     * this setting of elim to false will only really affect players that can win money
+     */
     public void setBestHands(){
         for (Player p : players){
             if (!p.isElim()) {
@@ -69,6 +77,10 @@ public class Round {
             p.setElim(false);
         }
     }
+
+    /**
+     * This function will give the wins to the players
+     */
     public void giveWins(){
         boolean under = false;
         boolean win = false;

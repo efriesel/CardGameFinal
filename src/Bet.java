@@ -59,7 +59,7 @@ public class Bet {
         if (numPlayers == 1){
             return true;
         }
-        if (current == playersIn.size())
+        if (current == numPlayers)
             current = 0;
         if (playersIn.size() <= 1) {
             setInputtedBet();
