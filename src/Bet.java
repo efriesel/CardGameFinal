@@ -13,11 +13,17 @@ public class Bet {
     int current;
     int numPlayers;
 
-    public Bet(ArrayList<Player> players, int minBet, int turn, int numPlayers, Round r, GameViewer window) {
+    public Bet(ArrayList<Player> players, int minBet, int turn, int numPlayers, int calls, Round r, GameViewer window) {
         this.players = players;
         this.minBet = minBet;
         this.window = window;
-        calls = 0;
+        this.calls = calls;
+        if (calls == 1){
+            if (turn == 0)
+                players.get(players.size() - 1).setCurrentInputtedMoney(minBet);
+            else
+                players.get(turn - 1).setCurrentInputtedMoney(minBet);
+        }
         playersIn = new ArrayList<>();
         playersIn.addAll(players);
         if (turn > players.size()) {
@@ -33,36 +39,39 @@ public class Bet {
     }
 
     public boolean bet(String in) {
-        if (in.equals("Call")) {
-            if (players.get(current).getMoney() == bet){
+        if (!players.get(current).isElim()) {
+            if (in.equals("Call")) {
+                if (players.get(current).getMoney() == bet) {
+                    playersIn.remove(players.get(current));
+                    players.get(current).setInputtedMoney(players.get(current).getMoney());
+                    players.get(current).setCurrentInputtedMoney(0);
+                }
+                if (players.get(current).getMoney() < players.get(current).getInputtedMoney() + bet)
+                    return false;
+                players.get(current).setCurrentInputtedMoney(bet);
+                calls++;
+            }
+            else if (in.equals("Fold")) {
+                players.get(current).setElim(true);
                 playersIn.remove(players.get(current));
+                numPlayers--;
+            }
+            else {
+                if (players.get(current).getMoney() - players.get(current).getInputtedMoney() > bet) {
+                    bet = players.get(current).getMoney() - players.get(current).getInputtedMoney();
+                    calls = 1;
+                } else {
+                    playersIn.remove(players.get(current));
+                    calls++;
+                }
                 players.get(current).setInputtedMoney(players.get(current).getMoney());
                 players.get(current).setCurrentInputtedMoney(0);
             }
-            if (players.get(current).getMoney() < players.get(current).getInputtedMoney() + bet)
-                return false;
-            players.get(current).setCurrentInputtedMoney(bet);
-            calls++;
-        } else if (in.equals("Fold")) {
-            players.get(current).setElim(true);
-            playersIn.remove(players.get(current));
-            numPlayers--;
-        } else {
-            if (players.get(current).getMoney() - players.get(current).getInputtedMoney() > bet) {
-                bet = players.get(current).getMoney() - players.get(current).getInputtedMoney();
-                calls = 1;
-            }
-            else {
-                playersIn.remove(players.get(current));
-                calls++;
-            }
-            players.get(current).setInputtedMoney(players.get(current).getMoney());
-            players.get(current).setCurrentInputtedMoney(0);
         }
         current++;
-        if (numPlayers == 1){
-            return true;
-        }
+//        if (numPlayers == 1){
+//            return true;
+//        }
         if (current == players.size())
             current = 0;
         if (players.get(current).getMoney() == players.get(current).getInputtedMoney() + players.get(current).getCurrentInputtedMoney())
@@ -112,5 +121,6 @@ public class Bet {
             p.setCurrentInputtedMoney(0);
         }
         window.setPot(pot);
+        r.setNumPlayers(numPlayers);
     }
 }

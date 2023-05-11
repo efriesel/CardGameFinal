@@ -30,8 +30,8 @@ public class Game {
         r = new Round(playerCount, deck, players, window);
     }
 
-    public Bet startBet(int bet, int turn){
-        return r.startBet(bet, turn);
+    public Bet startBet(int bet, int turn, int calls){
+        return r.startBet(bet, turn, calls);
     }
     public int getBet(){
         return bet;

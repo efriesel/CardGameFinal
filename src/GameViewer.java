@@ -46,6 +46,8 @@ public class GameViewer extends JFrame implements ActionListener {
     private ArrayList<Card> river;
     // the current turn
     private int turn;
+    // to control the blind
+    private int blind;
     // Button declaration and overlay image declaration
     private final JButton submit = new JButton("Submit");
     private final Image submit_image = new ImageIcon("Resources/Submit.png").getImage();
@@ -113,8 +115,10 @@ public class GameViewer extends JFrame implements ActionListener {
         // set the bounds of the text field
         field.setBounds(WINDOW_WIDTH / 4, Y_HEIGHT / 11 * 5 + HEADER_HEIGHT, WINDOW_WIDTH / 2,
                 Y_HEIGHT / 11);
-        // initialize the turn as -1 and roundWinner to false for first few states of the game
-        turn = 0;
+        // initialize the turn as 1 to start as the person after the blind (Start blind at 0)
+        turn = 1;
+        blind = 0;
+        // initialize the blind as the first person
         roundWinner = false;
         // set LocationRelativeTo to null so I have control
         this.setLocationRelativeTo(null);
@@ -244,7 +248,7 @@ public class GameViewer extends JFrame implements ActionListener {
                 state++;
                 remove(submit);
                 show = false;
-                b = game.startBet(game.getBet(), turn);
+                b = game.startBet(game.getBet(), turn, 1);
                 repaint();
             }
         }
@@ -270,19 +274,26 @@ public class GameViewer extends JFrame implements ActionListener {
                         state = PRE_DEAL;
                         count = 0;
                         roundWinner = true;
-                        if (turn >= players.size())
+                        blind++;
+                        if (blind >= players.size()){
+                            blind = 0;
+                        }
+                        if (blind >= players.size() - 1) {
                             turn = 0;
+                        }
+                        else
+                            turn = blind + 1;
                         repaint();
                         pot = 0;
                     }
                     else if (count == 0) {
                         river = game.riverStart(3);
-                        b = game.startBet(0, turn);
+                        b = game.startBet(0, turn, 0);
                         count++;
                     }
                     else {
                         game.river(1);
-                        b = game.startBet(0, turn);
+                        b = game.startBet(0, turn, 0);
                         count++;
                     }
                 }
@@ -379,6 +390,10 @@ public class GameViewer extends JFrame implements ActionListener {
                                 players.get(i).getCurrentInputtedMoney()), x, current + CARD_WIDTH * 6 / 5 +
                                 SMALL_FONT.getSize());
                 }
+                if (i == blind){
+                    g.drawString("Blind", x, current + CARD_WIDTH * 6 / 5 +
+                            SMALL_FONT.getSize() * 2);
+                }
             }
         }
     }
@@ -432,6 +447,9 @@ public class GameViewer extends JFrame implements ActionListener {
                     players.get(turn).getCurrentInputtedMoney());
         g.drawString(name, WINDOW_WIDTH / 2 - (SMALL_FONT.getSize() * name.length()) / 4,
                 Y_HEIGHT / 5 * 4 + HEADER_HEIGHT);
+        if (turn == blind)
+            g.drawString("Blind", WINDOW_WIDTH - (SMALL_FONT.getSize() * 10),
+                    Y_HEIGHT / 5 * 4 + HEADER_HEIGHT);
         if (!players.get(turn).isElim()){
             if (show) {
                 g.drawImage(players.get(turn).getHand().getCards().get(0).getImage(), WINDOW_WIDTH / 2 - CARD_WIDTH,

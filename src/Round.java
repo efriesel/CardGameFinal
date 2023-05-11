@@ -38,8 +38,8 @@ public class Round {
             }
         }
     }
-    public Bet startBet(int bet, int turn){
-        return new Bet(playersIn, bet, turn, numPlayers, this, window);
+    public Bet startBet(int bet, int turn, int calls){
+        return new Bet(playersIn, bet, turn, numPlayers, calls, this, window);
     }
     public void river(int cards){
         deck.burn();
