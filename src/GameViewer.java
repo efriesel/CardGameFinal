@@ -247,13 +247,12 @@ public class GameViewer extends JFrame implements ActionListener {
         else if (state == PRE_DEAL){
             String s = e.getActionCommand();
             if (s != null && s.equals("Submit")) {
-                if (roundWinner){
-                    game.setPlayersInGame();
+                if (roundWinner)
                     game.run();
-                }
                 state++;
                 remove(submit);
                 show = false;
+                System.out.println(turn);
                 b = game.startBet(game.getBet(), turn, 1);
                 repaint();
             }
@@ -277,7 +276,10 @@ public class GameViewer extends JFrame implements ActionListener {
                 if (b.bet(s)) {
                     if (count == 3) {
                         game.update();
+                        game.setPlayersInGame();
                         state = PRE_DEAL;
+                        if (playerCount == 1)
+                            state = WIN;
                         count = 0;
                         roundWinner = true;
                         blind++;

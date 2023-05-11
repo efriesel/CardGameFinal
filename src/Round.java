@@ -25,7 +25,6 @@ public class Round {
         river = new ArrayList<>();
         numPlayers = players.size();
         initialDeal();
-        window.repaint();
     }
     public void initialDeal(){
         deck.setCardsLeft(deck.getSize());
