@@ -289,6 +289,8 @@ public class GameViewer extends JFrame implements ActionListener {
                         }
                         else
                             turn = blind + 1;
+                        if (turn >= players.size())
+                            turn = 0;
                         repaint();
                         pot = 0;
                     }
