@@ -48,6 +48,10 @@ public class GameViewer extends JFrame implements ActionListener {
     private int turn;
     // to control the blind
     private int blind;
+    //Easter Egg
+    public int EE8;
+    private final Image[] EE8_IMAGES = new Image[]{new ImageIcon("Resources/Easter Egg 8/EE81.png").getImage(),
+            new ImageIcon("Resources/Easter Egg 8/EE82.png").getImage()};
     // Button declaration and overlay image declaration
     private final JButton submit = new JButton("Submit");
     private final Image submit_image = new ImageIcon("Resources/Submit.png").getImage();
@@ -87,6 +91,8 @@ public class GameViewer extends JFrame implements ActionListener {
         setTitle("Poker");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(null);
+        // initialize the easter egg
+        EE8 = -1;
         // set the bounds for the submit button, with cancel to the left of half of it
         submit.setBounds(WINDOW_WIDTH / 2 - BUTTON_WIDTH / 2, Y_HEIGHT / 4 * 3 + HEADER_HEIGHT - BUTTON_HEIGHT * 2
                 - BUTTON_HEIGHT / 2, BUTTON_WIDTH, BUTTON_HEIGHT);
@@ -448,15 +454,29 @@ public class GameViewer extends JFrame implements ActionListener {
         g.drawString(name, WINDOW_WIDTH / 2 - (SMALL_FONT.getSize() * name.length()) / 4,
                 Y_HEIGHT / 5 * 4 + HEADER_HEIGHT);
         if (turn == blind)
-            g.drawString("Blind", WINDOW_WIDTH - (SMALL_FONT.getSize() * 10),
-                    Y_HEIGHT / 5 * 4 + HEADER_HEIGHT);
+            g.drawString("Blind", WINDOW_WIDTH / 2 - SMALL_FONT.getSize() * 5 / 4,
+                    Y_HEIGHT / 5 * 4 + HEADER_HEIGHT - SMALL_FONT.getSize());
         if (!players.get(turn).isElim()){
             if (show) {
-                g.drawImage(players.get(turn).getHand().getCards().get(0).getImage(), WINDOW_WIDTH / 2 - CARD_WIDTH,
-                        Y_HEIGHT / 2 + HEADER_HEIGHT, CARD_WIDTH, CARD_HEIGHT, this);
-                g.drawImage(players.get(turn).getHand().getCards().get(1).getImage(), WINDOW_WIDTH / 2,
-                        Y_HEIGHT / 2 + HEADER_HEIGHT, CARD_WIDTH, CARD_HEIGHT, this);
-            } else {
+                if (EE8 == turn){
+                    g.drawImage(EE8_IMAGES[0], WINDOW_WIDTH / 2 - CARD_WIDTH, Y_HEIGHT / 2 + HEADER_HEIGHT,
+                            CARD_WIDTH, CARD_HEIGHT, this);
+                    g.drawImage(EE8_IMAGES[1], WINDOW_WIDTH / 2, Y_HEIGHT / 2 + HEADER_HEIGHT, CARD_WIDTH,
+                            CARD_HEIGHT, this);
+                    g.drawString("A Player Deployed a CHEAT CODE", WINDOW_WIDTH / 2 - SMALL_FONT.getSize() * 30 / 4,
+                            Y_HEIGHT * 7 / 10 + HEADER_HEIGHT);
+                    g.drawString("Nice Loadout tho, lets go tilted", WINDOW_WIDTH / 2 - SMALL_FONT.getSize() * 32 / 4,
+                            Y_HEIGHT * 7 / 10 + HEADER_HEIGHT + SMALL_FONT.getSize());
+                    EE8 = -1;
+                }
+                else {
+                    g.drawImage(players.get(turn).getHand().getCards().get(0).getImage(), WINDOW_WIDTH / 2 - CARD_WIDTH,
+                            Y_HEIGHT / 2 + HEADER_HEIGHT, CARD_WIDTH, CARD_HEIGHT, this);
+                    g.drawImage(players.get(turn).getHand().getCards().get(1).getImage(), WINDOW_WIDTH / 2,
+                            Y_HEIGHT / 2 + HEADER_HEIGHT, CARD_WIDTH, CARD_HEIGHT, this);
+                }
+            }
+            else {
                 g.drawImage(BACK_OF_CARD_FRONT, WINDOW_WIDTH / 2 - CARD_WIDTH, Y_HEIGHT / 2 + HEADER_HEIGHT,
                         CARD_WIDTH, CARD_HEIGHT, this);
                 g.drawImage(BACK_OF_CARD_FRONT, WINDOW_WIDTH / 2, Y_HEIGHT / 2 + HEADER_HEIGHT, CARD_WIDTH,

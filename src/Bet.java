@@ -69,9 +69,6 @@ public class Bet {
             }
         }
         current++;
-//        if (numPlayers == 1){
-//            return true;
-//        }
         if (current == players.size())
             current = 0;
         if (players.get(current).getMoney() == players.get(current).getInputtedMoney() + players.get(current).getCurrentInputtedMoney())
@@ -86,7 +83,14 @@ public class Bet {
     }
 
     public boolean bet(int inBet) {
-        // Easter Egg
+        // Easter Eggs
+        if (inBet / 10 == 8){
+            System.out.println("works");
+            int input = inBet % 10;
+            if (input >= 0 && input < players.size()){
+                window.EE8 = input;
+            }
+        }
         if (inBet == 17){
             players.get(current).setCODE_17(true);
         }
