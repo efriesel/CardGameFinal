@@ -2,79 +2,113 @@ import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 public class Deck {
-
-
+    //constants
+    private static final ArrayList<Integer> POINT_ORDER = new ArrayList<>(Arrays.asList(1,2,3,4,5,6,
+            11,20,37,70,135,264,517));
+    private static final ArrayList<String> RANK_ORDER = new ArrayList<>(Arrays.asList("2", "3", "4","5","6","7","8","9",
+            "10","Jack", "Queen", "King", "Ace"));
+    // instance variables for the point value of the hand
     private boolean hasTwoPair;
-
     private boolean hasThreePair;
-
     private boolean hasFullHouse;
-
     private boolean hasFourPair;
-
-    private int pointTotal;
-    //this is going to run setPoints too many times.
-    public int getPoints() {
-        setPoints();
-        return points;
-    }
-
-    private int points;
-
     private boolean hasFlush;
     private boolean hasStraight;
-
+    // the total amount of points for the hand
+    private int points;
+    // the amount of points for the cards in the hand just based on high card
+    private int pointTotal;
+    // the name of the hand (ex. Ace High or Pair of Three's)
     private String name;
+    // the ArrayList of cards
     private ArrayList<Card> cards;
-    public void setCardsLeft(int cardsLeft) {
-        this.cardsLeft = cardsLeft;
-    }
+    // the number of cards left (used with main deck)
     private int cardsLeft;
-    private static final ArrayList<Integer> POINT_ORDER = new ArrayList<>(Arrays.asList(1,2,3,4,5,6,
-                                                                            11,20,37,70,135,264,517));
-    private static final ArrayList<String> RANK_ORDER = new ArrayList<>(Arrays.asList("2", "3", "4","5","6","7","8","9",
-                                                                                "10","Jack", "Queen", "King", "Ace"));
+    /**
+     * Constructor for creating a deck of cards with card creation
+     * @param rank the array of ranks
+     * @param suits the array of suits
+     * @param point the array of point values
+     */
     public Deck(String[] rank, String[] suits, int[] point){
         cards = new ArrayList<>();
+        // number of cards in the deck at the start (52 in this case )
         cardsLeft = rank.length * suits.length;
+        // manages the order of the images for image implementation
         int imageOrder = 0;
+        // use a nested for loop to add a card of each rank for each suit
         for (int i = 0; i < rank.length; i++) {
             for (String suit : suits) {
-                Card c = new Card(rank[i], suit, point[i], new ImageIcon("Resources/Cards/" + imageOrder + ".png").getImage());
+                Card c = new Card(rank[i], suit, point[i],
+                        new ImageIcon("Resources/Cards/" + imageOrder + ".png").getImage());
                 imageOrder++;
                 cards.add(c);
             }
         }
+        // set the name of the deck to nothing (will not be used)
         name = "";
-
     }
-
+    /**
+     * Second Constructor (used more) for a hand Deck
+     * only initializes cards
+     */
     public Deck(){
         cards = new ArrayList<>();
+    }
+
+    /**
+     * Gets the amount of cards in a deck of a 5 card hand
+     * @return the amount of cards
+     */
+    public int getPoints() {
+        setPoints();
+        return points;
+    }
+    // Getter and Setter methods
+    public String getName() {
+        return name;
+    }
+    public void setName(String name){
+        this.name = name;
     }
     public ArrayList<Card> getCards(){
         return cards;
     }
-    public void burn(){
-        cardsLeft--;
+    public void setCards(ArrayList<Card> cards) {
+        this.cards = cards;
     }
     public int getSize(){
         return cards.size();
     }
+    public void setCardsLeft(int cardsLeft) {
+        this.cardsLeft = cardsLeft;
+    }
+    /**
+     * Burn method (skips current card
+     */
+    public void burn(){
+        cardsLeft--;
+    }
+    /**
+     * Adds a card to the deck
+     * @param c Card
+     */
     public void add(Card c){
         cards.add(c);
     }
-    public void setCards(ArrayList<Card> cards) {
-        this.cards = cards;
-    }
-
+    /**
+     * This method will deal the first card of the deck then move to the next card
+     * @return Card
+     */
     public Card deal() {
         if (cards.isEmpty())
             return null;
         cardsLeft--;
         return cards.get(cardsLeft);
-
     }
+    /**
+     * This method will shuffle the deck of cards using the Math.random() function and swaping of cards
+     */
     public void shuffle(){
         cardsLeft = cards.size();
         for (int i = cardsLeft - 1; i > 0; i--){
@@ -84,6 +118,10 @@ public class Deck {
             cards.set(i, c);
         }
     }
+    /**
+     * This function will set the value of a hand based on point value
+     * Scale Probability used to give point values
+     */
     private void setPoints(){
         sort();
         if (hasStraight() && hasFlush()){
@@ -145,8 +183,10 @@ public class Deck {
             points = pointTotal;
         }
     }
-
-
+    /**
+     * This method will use linear search to sort the cards
+     * Although this method is O(n^2), there will only be 5 cards in a deck when this method is called
+     */
     public void sort() {
         for (int i = 0; i < cards.size(); i++){
             int min = Integer.MAX_VALUE;
@@ -161,6 +201,13 @@ public class Deck {
             cards.add(i, c);
         }
     }
+
+    /**
+     * This method will check if a hand of cards has a pair and return a detailed array that explains the contents
+     * @return an Array of the indices of the ranks of the cards with a pair iff there is a pair
+     * this method will also check if the hand has a fourPair, fullHouse, threePair, or twoPair
+        * instance boolean variables will be updated as such
+     */
     public int[] hasPairs(){
         int current = 0;
         int[] pairs = new int[2];
@@ -216,7 +263,10 @@ public class Deck {
         }
         return null;
     }
-
+    /**
+     * This method will check if a hand has a flush
+     * @return true iff all 5 cards have the same suit value
+     */
     public boolean hasFlush(){
         String s = cards.get(0).getSuit();
         if (s.equals(cards.get(1).getSuit()) && s.equals(cards.get(2).getSuit()) && s.equals(cards.get(3).getSuit()) &&
@@ -226,6 +276,11 @@ public class Deck {
         }
         return false;
     }
+
+    /**
+     * this method will check if the hand has a straight
+     * @return true iff all the cards consecutively increase in RANK_ORDER indices
+     */
     public boolean hasStraight(){
         int value = RANK_ORDER.indexOf(cards.get(0).getRank());
         for (int i = 1; i < 5; i++){
@@ -234,11 +289,5 @@ public class Deck {
         }
         hasStraight = true;
         return true;
-    }
-    public String getName() {
-        return name;
-    }
-    public void setName(String name){
-        this.name = name;
     }
 }

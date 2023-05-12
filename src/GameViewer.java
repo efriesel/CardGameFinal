@@ -140,6 +140,7 @@ public class GameViewer extends JFrame implements ActionListener {
     {
         // the Background will always be painted
         printBackground(g);
+        // if state is WELCOME_SCREEN, add the welcome state with
         if (state == WELCOME_SCREEN) {
             printInstructions(g);
             add(submit);
@@ -252,7 +253,6 @@ public class GameViewer extends JFrame implements ActionListener {
                 state++;
                 remove(submit);
                 show = false;
-                System.out.println(turn);
                 b = game.startBet(game.getBet(), turn, 1);
                 repaint();
             }

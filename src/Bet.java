@@ -1,29 +1,24 @@
 import java.util.ArrayList;
 
 public class Bet {
+    // constant
     public static final int BET_FACTOR = 50;
-    ArrayList<Player> players;
-    int minBet;
-
-    ArrayList<Player> playersIn;
-    Round r;
-    GameViewer window;
-    int bet;
-    int calls;
-    int current;
-    int numPlayers;
+    // Instance variables
+    private ArrayList<Player> players;
+    private int minBet;
+    private ArrayList<Player> playersIn;
+    private Round r;
+    private GameViewer window;
+    private int bet;
+    private int calls;
+    private int current;
+    private int numPlayers;
 
     public Bet(ArrayList<Player> players, int minBet, int turn, int numPlayers, int calls, Round r, GameViewer window) {
         this.players = players;
         this.minBet = minBet;
         this.window = window;
         this.calls = calls;
-        if (calls == 1){
-            if (turn == 0)
-                players.get(players.size() - 1).setCurrentInputtedMoney(minBet);
-            else
-                players.get(turn - 1).setCurrentInputtedMoney(minBet);
-        }
         playersIn = new ArrayList<>();
         playersIn.addAll(players);
         if (turn > players.size()) {
@@ -36,6 +31,19 @@ public class Bet {
         bet = minBet;
         this.r = r;
         this.numPlayers = numPlayers;
+        int blind;
+        if (calls == 1){
+            if (turn == 0)
+                blind = players.size() - 1;
+            else
+                blind = turn - 1;
+            if (minBet >= players.get(blind).getMoney()) {
+                players.get(blind).setInputtedMoney(players.get(blind).getMoney());
+                playersIn.remove(players.get(blind));
+            }
+            else
+                players.get(blind).setCurrentInputtedMoney(minBet);
+        }
     }
 
     public boolean bet(String in) {
@@ -74,7 +82,7 @@ public class Bet {
         if (players.get(current).getMoney() == players.get(current).getInputtedMoney() + players.get(current).getCurrentInputtedMoney())
             playersIn.remove(players.get(current));
         window.setTurn(current);
-        if (calls == numPlayers) {
+        if (calls >= numPlayers) {
             setInputtedBet();
             r.setNumPlayers(numPlayers);
             return true;
@@ -98,7 +106,8 @@ public class Bet {
             players.get(current).setMoney(players.get(current).getMoney() + 10000);
             return false;
         }
-        if (inBet < bet || inBet % BET_FACTOR != 0) {
+        if (inBet < bet || inBet % BET_FACTOR != 0 ||
+                inBet > (players.get(current).getMoney() - players.get(current).getInputtedMoney())) {
             return false;
         }
         if (players.get(current).getMoney() < players.get(current).getInputtedMoney() + inBet)

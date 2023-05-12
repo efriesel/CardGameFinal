@@ -118,7 +118,6 @@ public class Round {
         }
 
     }
-
     /**
      * Sorts players from best to worst bestHand points
      * @return an ArrayList of Players
