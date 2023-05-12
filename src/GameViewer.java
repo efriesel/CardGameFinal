@@ -262,7 +262,7 @@ public class GameViewer extends JFrame implements ActionListener {
             String current = field.getText();
             if (current != null && current.length() <= MAX_CHARS) {
                 // Easter Egg
-                if (current.equals("Ethan") || current.equals("Will"))
+                if (current.equals("Ethan") || current.equals("Will") || current.equals("PB"))
                     players.add(new Player(current, 100000));
                 else
                     players.add(new Player(current, Game.INITIAL_MONEY));
