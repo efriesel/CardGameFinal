@@ -92,7 +92,8 @@ public class Bet {
         current++;
         if (current == players.size())
             current = 0;
-        if (players.get(current).getMoney() == players.get(current).getInputtedMoney() + players.get(current).getCurrentInputtedMoney())
+        if (players.get(current).getMoney() == players.get(current).getInputtedMoney() +
+                players.get(current).getCurrentInputtedMoney())
             playersIn.remove(players.get(current));
         window.setTurn(current);
         if (calls >= numPlayers) {
