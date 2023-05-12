@@ -2,18 +2,14 @@
 import java.util.ArrayList;
 
 public class Round {
-
+    // instance variables
     private final int playerCount;
-
     private final Deck deck;
-
     private final ArrayList<Card> river;
-
     private final ArrayList<Player> players;
     private ArrayList<Player> playersIn;
     private int numPlayers;
     private final GameViewer window;
-
 
     public Round(int playerCount, Deck deck, ArrayList<Player> players, GameViewer window){
         this.players = players;
