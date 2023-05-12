@@ -420,7 +420,7 @@ public class GameViewer extends JFrame implements ActionListener {
         g.setColor(Color.BLACK);
         g.drawString("Enter the name of player " + (count + 1), WINDOW_WIDTH / 4,
                 Y_HEIGHT / 4 + HEADER_HEIGHT + SMALL_FONT.getSize());
-        g.drawString("CHARACTER LIMIT =" + MAX_CHARS, WINDOW_WIDTH / 4,
+        g.drawString("CHARACTER LIMIT = " + MAX_CHARS, WINDOW_WIDTH / 4,
                 Y_HEIGHT / 4 + HEADER_HEIGHT + SMALL_FONT.getSize() * 2);
     }
 
