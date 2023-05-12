@@ -451,6 +451,7 @@ public class GameViewer extends JFrame implements ActionListener {
             }
             // only print the outline if it is not the person's turn
             if (i != turn) {
+                // rotated card outline
                 g.drawRect(x, current, CARD_HEIGHT, CARD_WIDTH);
                 if (i < playerCount) {
                     g.drawString(players.get(i).getName(), x, current + CARD_WIDTH * 6 / 5);
@@ -502,6 +503,7 @@ public class GameViewer extends JFrame implements ActionListener {
                 x = WINDOW_WIDTH - GAP_BEFORE_EDGE - CARD_HEIGHT;
             }
             if (i != turn && !players.get(i).isElim()) {
+                // card is rotated
                 g.drawImage(BACK_OF_CARD_SIDE, x, current, CARD_HEIGHT, CARD_WIDTH, this);
             }
         }
