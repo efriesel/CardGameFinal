@@ -390,9 +390,12 @@ public class GameViewer extends JFrame implements ActionListener {
         g.fillRect(WINDOW_WIDTH / 4, Y_HEIGHT / 4 + HEADER_HEIGHT, WINDOW_WIDTH / 2, Y_HEIGHT / 2);
         g.setFont(SMALL_FONT);
         g.setColor(Color.BLACK);
-        g.drawString("Welcome to poker,", WINDOW_WIDTH / 4, Y_HEIGHT / 4 + HEADER_HEIGHT + SMALL_FONT.getSize());
-        g.drawString("for information about ", WINDOW_WIDTH / 4, Y_HEIGHT / 4 + HEADER_HEIGHT + SMALL_FONT.getSize() * 2);
-        g.drawString("how to play, look it up", WINDOW_WIDTH / 4, Y_HEIGHT / 4 + HEADER_HEIGHT + SMALL_FONT.getSize() * 3);
+        g.drawString("Welcome to poker,", WINDOW_WIDTH / 4, Y_HEIGHT / 4 + HEADER_HEIGHT +
+                SMALL_FONT.getSize());
+        g.drawString("for information about ", WINDOW_WIDTH / 4, Y_HEIGHT / 4 + HEADER_HEIGHT +
+                SMALL_FONT.getSize() * 2);
+        g.drawString("how to play, look it up", WINDOW_WIDTH / 4, Y_HEIGHT / 4 + HEADER_HEIGHT +
+                SMALL_FONT.getSize() * 3);
     }
 
     /**
@@ -550,14 +553,17 @@ public class GameViewer extends JFrame implements ActionListener {
                             CARD_WIDTH, CARD_HEIGHT, this);
                     g.drawImage(EE8_IMAGES[1], WINDOW_WIDTH / 2, Y_HEIGHT / 2 + HEADER_HEIGHT, CARD_WIDTH,
                             CARD_HEIGHT, this);
-                    g.drawString("A Player Deployed a CHEAT CODE", WINDOW_WIDTH / 2 - SMALL_FONT.getSize() * 30 / 4,
+                    g.drawString("A Player Deployed a CHEAT CODE", WINDOW_WIDTH / 2 -
+                                    SMALL_FONT.getSize() * 30 / 4,
                             Y_HEIGHT * 7 / 10 + HEADER_HEIGHT);
-                    g.drawString("Nice Loadout tho, lets go tilted", WINDOW_WIDTH / 2 - SMALL_FONT.getSize() * 32 / 4,
+                    g.drawString("Nice Loadout tho, lets go tilted", WINDOW_WIDTH / 2 -
+                                    SMALL_FONT.getSize() * 32 / 4,
                             Y_HEIGHT * 7 / 10 + HEADER_HEIGHT + SMALL_FONT.getSize());
                     EE8 = -1;
                 }
                 else {
-                    g.drawImage(players.get(turn).getHand().getCards().get(0).getImage(), WINDOW_WIDTH / 2 - CARD_WIDTH,
+                    g.drawImage(players.get(turn).getHand().getCards().get(0).getImage(),
+                            WINDOW_WIDTH / 2 - CARD_WIDTH,
                             Y_HEIGHT / 2 + HEADER_HEIGHT, CARD_WIDTH, CARD_HEIGHT, this);
                     g.drawImage(players.get(turn).getHand().getCards().get(1).getImage(), WINDOW_WIDTH / 2,
                             Y_HEIGHT / 2 + HEADER_HEIGHT, CARD_WIDTH, CARD_HEIGHT, this);
@@ -612,8 +618,8 @@ public class GameViewer extends JFrame implements ActionListener {
         g.drawImage(field_image, field.getX(), field.getY() + field.getHeight() / 2, field.getWidth(),
                 field.getHeight(), this);
         add(submit);
-        g.drawImage(submit_image, submit.getX() - 2, submit.getY() + submit.getHeight() / 2, submit.getWidth() + 2,
-                submit.getHeight(), this);
+        g.drawImage(submit_image, submit.getX() - 2, submit.getY() + submit.getHeight() / 2,
+                submit.getWidth() + 2, submit.getHeight(), this);
         add(cancel);
         g.drawImage(cancel_image, cancel.getX(), cancel.getY() + cancel.getHeight() / 2 + 5, cancel.getWidth(),
                 cancel.getHeight(), this);
