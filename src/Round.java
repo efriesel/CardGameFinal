@@ -11,39 +11,68 @@ public class Round {
     private int numPlayers;
     private final GameViewer window;
 
+    // Constructor
     public Round(int playerCount, Deck deck, ArrayList<Player> players, GameViewer window){
         this.players = players;
         this.playerCount = playerCount;
         this.deck = deck;
         this.window = window;
+        // playersIn is the ArrayList of players that can bet
         playersIn = new ArrayList<>();
         playersIn.addAll(players);
         river = new ArrayList<>();
         numPlayers = players.size();
+        // deal the cards in the constructor
         initialDeal();
     }
+    // getter function for the river
+    public ArrayList<Card> getRiver(){
+        return river;
+    }
+    // setter function for the number of players
+    public void setNumPlayers(int numPlayers) {
+        this.numPlayers = numPlayers;
+    }
+    /**
+     * This method will shuffle the deck and deal cards to each player
+     */
     public void initialDeal(){
+        // reset the deck
         deck.setCardsLeft(deck.getSize());
+        // Shuffle 3 times
         deck.shuffle();
         deck.shuffle();
         deck.shuffle();
+        // deal two cards to each player, going around in a circle dealing one card than another on the next pass
         for (int i = 0; i < 2; i++){
             for (int j = 0; j < playerCount; j++){
                 players.get(j).addCard(deck.deal());
             }
         }
     }
+
+    /**
+     * This method will initialize the bet
+        * input the players that are in the round, the bet, the turn, the number of players, this round, and the window
+     * @param bet the minimum bet
+     * @param turn the turn that the round is to begin on
+     * @param calls 1 iff there is a blind
+     * @return bet: Bet
+     */
     public Bet startBet(int bet, int turn, int calls){
         return new Bet(playersIn, bet, turn, numPlayers, calls, this, window);
     }
+
+    /**
+     * this method will update the river
+     * @param cards the number of cards to flip (3 initially, 1 for each of the last 2 betting rounds)
+     */
     public void river(int cards){
+        // burn a card before the deal
         deck.burn();
         for (int i = 0; i < cards; i++){
             river.add(deck.deal());
         }
-    }
-    public ArrayList<Card> getRiver(){
-        return river;
     }
     public void update(){
         playersIn = new ArrayList<>();
@@ -178,9 +207,5 @@ public class Round {
             j++;
         }
         return order;
-    }
-
-    public void setNumPlayers(int numPlayers) {
-        this.numPlayers = numPlayers;
     }
 }

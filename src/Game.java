@@ -63,7 +63,6 @@ public class Game {
         r.river(river);
         return r.getRiver();
     }
-
     /**
      * This method will add to and not return the river
      * @param in the number of cards to be added
@@ -71,7 +70,6 @@ public class Game {
     public void river(int in){
         r.river(in);
     }
-
     /**
      * this method will update the wins at the end of a round and increase the bet based on the BET_INCREASE_AMOUNT
      */
@@ -79,7 +77,6 @@ public class Game {
         r.update();
         bet += BET_INCREASE_AMOUNT;
     }
-
     /**
      * this method will set the players ArrayList and reset the playerCount to match the players ArrayList
      * @param players ArrayList of players
@@ -88,7 +85,6 @@ public class Game {
         this.players = players;
         playerCount = players.size();
     }
-
     /**
      * This method will update the players ArrayList after a round, and the window to match it
      * if a player is out of money, they are removed and playerCount is decreased
