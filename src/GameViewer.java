@@ -542,6 +542,7 @@ public class GameViewer extends JFrame implements ActionListener {
                     Y_HEIGHT / 5 * 4 + HEADER_HEIGHT - SMALL_FONT.getSize());
         if (!players.get(turn).isElim()){
             if (show) {
+                // Easter Egg implementation
                 if (EE8 == turn){
                     g.drawImage(EE8_IMAGES[0], WINDOW_WIDTH / 2 - CARD_WIDTH, Y_HEIGHT / 2 + HEADER_HEIGHT,
                             CARD_WIDTH, CARD_HEIGHT, this);
