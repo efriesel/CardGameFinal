@@ -132,6 +132,24 @@ public class GameViewer extends JFrame implements ActionListener {
         // setVisible to true
         setVisible(true);
     }
+    // getter and setter methods
+    public void setPlayerCount(int playerCount) {
+        this.playerCount = playerCount;
+    }
+    public void setTurn(int turn) {
+        this.turn = turn;
+    }
+    public void setPot(int pot){
+        this.pot = pot;
+    }
+    public void setRoundWinner(Player roundWinner){
+        this.winner = roundWinner;
+    }
+    // this method assigns the winner
+    public void win(Player p){
+        winner = p;
+        state = WIN;
+    }
 
     /**
      * This paint method will paint the background and foreground that depends on state of game
@@ -617,11 +635,6 @@ public class GameViewer extends JFrame implements ActionListener {
         }
         g.drawString(name, WINDOW_WIDTH / 2 - (SMALL_FONT.getSize() * name.length()) / 2, Y_HEIGHT / 2);
     }
-    // this method assigns the winner
-    public void win(Player p){
-        winner = p;
-        state = WIN;
-    }
 
     /**
      * This method checks if a string is numeric
@@ -640,18 +653,5 @@ public class GameViewer extends JFrame implements ActionListener {
             return false;
         }
         return true;
-    }
-    // getter and setter methods
-    public void setPlayerCount(int playerCount) {
-        this.playerCount = playerCount;
-    }
-    public void setTurn(int turn) {
-        this.turn = turn;
-    }
-    public void setPot(int pot){
-        this.pot = pot;
-    }
-    public void setRoundWinner(Player roundWinner){
-        this.winner = roundWinner;
     }
 }
