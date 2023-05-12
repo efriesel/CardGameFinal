@@ -652,7 +652,8 @@ public class GameViewer extends JFrame implements ActionListener {
         }
         try {
             int i = Integer.parseInt(strNum);
-        } catch (NumberFormatException nfe) {
+        }
+        catch (NumberFormatException nfe) {
             return false;
         }
         return true;
