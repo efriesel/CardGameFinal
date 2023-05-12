@@ -307,14 +307,19 @@ public class GameViewer extends JFrame implements ActionListener {
             }
             else{
                 if (b.bet(s)) {
+                    // after the river is finished and 4 rounds of betting occured
                     if (count == 3) {
+                        // update the players and give wins
                         game.update();
+                        // update who is in the game and reset the state
                         game.setPlayersInGame();
                         state = PRE_DEAL;
+                        // iff there is a winner
                         if (players.size() == 1)
                             state = WIN;
                         count = 0;
                         roundWinner = true;
+                        // set up the blind
                         blind++;
                         if (blind >= players.size()){
                             blind = 0;
@@ -329,17 +334,20 @@ public class GameViewer extends JFrame implements ActionListener {
                         repaint();
                         pot = 0;
                     }
+                    // first round of betting with river, start river, start a new bet
                     else if (count == 0) {
                         river = game.riverStart(3);
                         b = game.startBet(0, turn, 0);
                         count++;
                     }
+                    // after the first round of betting, update the river and start a new bet
                     else {
                         game.river(1);
                         b = game.startBet(0, turn, 0);
                         count++;
                     }
                 }
+                // cards will not be shown initially
                 show = false;
             }
             repaint();
