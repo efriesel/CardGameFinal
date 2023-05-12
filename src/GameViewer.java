@@ -278,7 +278,7 @@ public class GameViewer extends JFrame implements ActionListener {
                         game.update();
                         game.setPlayersInGame();
                         state = PRE_DEAL;
-                        if (playerCount == 1)
+                        if (players.size() == 1)
                             state = WIN;
                         count = 0;
                         roundWinner = true;
