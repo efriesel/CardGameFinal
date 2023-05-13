@@ -293,6 +293,7 @@ public class GameViewer extends JFrame implements ActionListener {
         else if (state == BET_PLAY){
             String s = e.getActionCommand();
             if (s.equals("Bet")){
+                // a player can only bet if they are in the game
                 if (!players.get(turn).isElim()) {
                     state = INPUT_BET;
                     Rectangle alter = submit.getBounds();
@@ -359,6 +360,7 @@ public class GameViewer extends JFrame implements ActionListener {
                 if (isNumeric(current)){
                     int in = Integer.parseInt(current);
                     if (b.bet(in)){
+                        // move the submit button back over
                         state = BET_PLAY;
                         submit.setBounds(submit.getX() - submit.getWidth() / 2, submit.getY(), submit.getWidth(),
                                 submit.getHeight());
@@ -371,6 +373,7 @@ public class GameViewer extends JFrame implements ActionListener {
             }
             else if (s.equals("Cancel")){
                 state = BET_PLAY;
+                // move the button back
                 submit.setBounds(submit.getX() - submit.getWidth() / 2, submit.getY(), submit.getWidth(),
                         submit.getHeight());
                 remove(submit);
@@ -491,6 +494,8 @@ public class GameViewer extends JFrame implements ActionListener {
         g.setColor(Color.BLACK);
         g.drawString("Submit When Ready", WINDOW_WIDTH / 4,
                 Y_HEIGHT / 4 + HEADER_HEIGHT + SMALL_FONT.getSize());
+        g.drawImage(submit_image, submit.getX(), submit.getY() + submit.getHeight() / 2,
+                submit.getWidth(), submit.getHeight(), this);
     }
 
     /**
